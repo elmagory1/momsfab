@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include momsfab *.css
+recursive-include momsfab *.csv
+recursive-include momsfab *.html
+recursive-include momsfab *.ico
+recursive-include momsfab *.js
+recursive-include momsfab *.json
+recursive-include momsfab *.md
+recursive-include momsfab *.png
+recursive-include momsfab *.py
+recursive-include momsfab *.svg
+recursive-include momsfab *.txt
+recursive-exclude momsfab *.pyc
