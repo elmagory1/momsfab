@@ -157,9 +157,30 @@ frappe.ui.form.on('Additional Operations Cost Without Charge', {
 });
 
 frappe.ui.form.on('Additional Operations Cost', {
-	total_charge: function(frm) {
-        compute_operations_cost_without_charges(cur_frm)
-	}
+	charge: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        if(d.delivery_charge){
+            d.total_charge = d.charge * cur_frm.doc.total_area_in_square_feet
+            cur_frm.refresh_field(d.parentfield)
+            compute_operations_cost(cur_frm)
+        } else if (d.fuel_charge){
+            d.total_charge = d.charge * cur_frm.doc.total_operations_time
+            cur_frm.refresh_field(d.parentfield)
+            compute_operations_cost(cur_frm)
+        }
+
+	},
+    account: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        if(d.delivery_charge){
+            d.total_charge = d.charge * cur_frm.doc.total_area_in_square_feet
+            cur_frm.refresh_field(d.parentfield)
+        } else if (d.fuel_charge){
+            d.total_charge = d.charge * cur_frm.doc.total_operations_time
+            cur_frm.refresh_field(d.parentfield)
+        }
+
+	},
 });
 
 frappe.ui.form.on('Wastage Charges', {

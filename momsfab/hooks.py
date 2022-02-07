@@ -196,6 +196,9 @@ fixtures = [
 					"Manufacturing Settings-wastage_rate",
 					"Manufacturing Settings-fuel_charge",
 
+					"Account-fuel_charge",
+					"Account-delivery_charge",
+
 
 				]
 			]
