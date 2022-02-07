@@ -45,34 +45,39 @@
    "fieldname": "length",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Length (mm)"
+   "label": "Length (mm)",
+   "precision": "9"
   },
   {
    "default": "0",
    "fieldname": "width",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Width  (mm)"
+   "label": "Width  (mm)",
+   "precision": "9"
   },
   {
    "default": "0",
    "fetch_from": "item_code.sheet_thickness",
    "fieldname": "thickness_of_sheet",
    "fieldtype": "Float",
-   "label": "Thickness of Sheet"
+   "label": "Thickness of Sheet",
+   "precision": "9"
   },
   {
    "default": "0",
    "fetch_from": "item_code.sheet_density",
    "fieldname": "sheet_density",
    "fieldtype": "Float",
-   "label": "Sheet Density"
+   "label": "Sheet Density",
+   "precision": "9"
   },
   {
    "default": "0",
    "fieldname": "weight_of_sheet",
    "fieldtype": "Float",
    "label": "Weight of Sheet",
+   "precision": "9",
    "read_only": 1
   },
   {
@@ -145,7 +150,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-02-07 11:46:48.601608",
+ "modified": "2022-02-07 14:31:38.129434",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM Details",
