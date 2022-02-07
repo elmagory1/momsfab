@@ -16,18 +16,37 @@ frappe.ui.form.on('Budget BOM', {
             freeze_message: "Creating Item...",
             async:false,
             callback: (r) => {
-                if(cur_frm.is_dirty()){
-                    cur_frm.save()
-                 }
+                // if(cur_frm.is_dirty()){
+                //     cur_frm.save()
+                //  }
                 cur_frm.reload_doc()
              }
         })
     },
 	refresh: function(frm) {
+
+        cur_frm.set_query("item", "wastage_charges", () => {
+            var items = []
+            if(cur_frm.doc.budget_bom_details){
+                items = Array.from(cur_frm.doc.budget_bom_details, x => "item_code" in x ? x.item_code:"")
+            }
+
+            return {
+                filters: {
+                    name: ['in', items]
+                }
+            }
+        })
+	    if(!cur_frm.doc.finish_good){
+	         cur_frm.add_child("finish_good", {})
+        }
 	    if(cur_frm.is_new()){
+
 	        cur_frm.doc.created_item = 0
             cur_frm.refresh_field("created_item")
         }
+         cur_frm.get_field("finish_good").grid.cannot_add_rows = true;
+        cur_frm.refresh_field("finish_good")
         frappe.db.get_single_value("Manufacturing Settings","scale_factor")
             .then(scale_factor_value => {
               scale_factor = scale_factor_value
@@ -77,12 +96,16 @@ frappe.ui.form.on('Budget BOM Details', {
         }
 
     },
-	length: function(frm, cdt, cdn) {
+	production_qty: function(frm, cdt, cdn) {
+        compute_totals(cur_frm)
+	},
+    length: function(frm, cdt, cdn) {
         var d = locals[cdt][cdn]
         var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-        d.amount = d.weight_of_sheet * d.rate
-        d.total_amount = d.amount * (1 + (margin / 100))
+        d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
+        d.margin_amount = d.amount * (margin / 100)
+        d.total_amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.amount * (1 + (margin / 100)) : d.margin_amount + d.amount
         d.area_in_square_feet = (d.length * d.width) / 92903
         d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
 
@@ -93,7 +116,8 @@ frappe.ui.form.on('Budget BOM Details', {
         var d = locals[cdt][cdn]
         var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-        d.amount = d.weight_of_sheet * d.rate
+                d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
+
         d.total_amount = d.amount * (1 + (margin / 100))
         d.area_in_square_feet = (d.length * d.width) / 92903
                 d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
@@ -106,7 +130,8 @@ frappe.ui.form.on('Budget BOM Details', {
 
         var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-        d.amount = d.weight_of_sheet * d.rate
+               d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
+
         d.total_amount = d.amount * (1 + (margin / 100))
                 d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
 
@@ -118,7 +143,8 @@ frappe.ui.form.on('Budget BOM Details', {
 
        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-        d.amount = d.weight_of_sheet * d.rate
+                d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
+
         d.total_amount = d.amount * (1 + (margin / 100))
                 d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
 
@@ -130,7 +156,8 @@ frappe.ui.form.on('Budget BOM Details', {
 
        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-        d.amount = d.weight_of_sheet * d.rate
+                d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
+
         d.total_amount = d.amount * (1 + (margin / 100))
                 d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
 
@@ -202,9 +229,7 @@ frappe.ui.form.on('Wastage Charges', {
 function compute_total_amounts(cur_frm) {
     var total_amount = cur_frm.doc.total_raw_material_cost + cur_frm.doc.total_operations_cost + cur_frm.doc.total_additional_operation_cost + cur_frm.doc.wastage_amount
     cur_frm.doc.total_amount = total_amount
-    cur_frm.doc.total_square_feet = cur_frm.doc.total_area_in_square_feet
-    console.log(total_amount)
-    console.log(cur_frm.doc.total_area_in_square_feet)
+    cur_frm.doc.total_square_feet = cur_frm.doc.type === 'Sheet Estimation' ? cur_frm.doc.total_area_in_square_feet : cur_frm.doc.total_production_qty
 
     if(total_amount > 0 && cur_frm.doc.total_square_feet > 0){
 
@@ -232,9 +257,11 @@ function compute_totals(cur_frm) {
     var total_weight = 0
     var total_operations_cost = 0
     var total_operations_time = 0
+    var total_production_qty = 0
         if(cur_frm.doc.budget_bom_details) {
             for(var x=0;x<cur_frm.doc.budget_bom_details.length;x+=1){
                 total_raw_material_cost += cur_frm.doc.budget_bom_details[x].raw_material_cost
+                total_production_qty += cur_frm.doc.budget_bom_details[x].production_qty
                 total_area_in_square_feet += cur_frm.doc.budget_bom_details[x].area_in_square_feet
                 total_weight += cur_frm.doc.budget_bom_details[x].weight_of_sheet
                 total_operations_cost += cur_frm.doc.budget_bom_details[x].operations_cost
@@ -246,7 +273,8 @@ function compute_totals(cur_frm) {
     cur_frm.doc.total_weight = total_weight
     cur_frm.doc.total_operations_cost = total_operations_cost
     cur_frm.doc.total_operations_time = total_operations_time
-    cur_frm.refresh_fields(["total_raw_material_cost","total_area_in_square_feet","total_weight","total_operations_cost","total_operations_time"])
+    cur_frm.doc.total_production_qty = total_production_qty
+    cur_frm.refresh_fields(["total_production_qty","total_raw_material_cost","total_area_in_square_feet","total_weight","total_operations_cost","total_operations_time"])
 compute_total_amounts(cur_frm)
 }
 function compute_operations_cost(cur_frm) {

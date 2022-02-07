@@ -9,6 +9,7 @@
  "field_order": [
   "naming_series",
   "status",
+  "type",
   "opportunity",
   "create_item",
   "created_item",
@@ -23,6 +24,7 @@
   "section_break_13",
   "total_area_in_square_feet",
   "total_weight",
+  "total_production_qty",
   "column_break_14",
   "total_raw_material_cost",
   "total_operations_cost",
@@ -316,12 +318,27 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "Created Item"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Sheet Estimation\nEngineering Estimation\nPipe Estimation"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: doc.type != 'Sheet Estimation'",
+   "fieldname": "total_production_qty",
+   "fieldtype": "Float",
+   "label": "Total Production Qty",
+   "precision": "9",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-07 14:19:36.526731",
+ "modified": "2022-02-07 16:40:17.464731",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",
