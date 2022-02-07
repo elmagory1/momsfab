@@ -1,0 +1,343 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2022-02-03 12:17:15.490871",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "status",
+  "opportunity",
+  "create_item",
+  "created_item",
+  "column_break_4",
+  "posting_date",
+  "customer_code",
+  "customer_name",
+  "raw_material_from_customer",
+  "amended_from",
+  "details_section",
+  "budget_bom_details",
+  "section_break_13",
+  "total_area_in_square_feet",
+  "total_weight",
+  "column_break_14",
+  "total_raw_material_cost",
+  "total_operations_cost",
+  "total_operations_time",
+  "additional_operations_cost_section",
+  "additional_operations_cost",
+  "section_break_15",
+  "data_1",
+  "column_break_17",
+  "total",
+  "additional_operations_cost_without_charge_section",
+  "additional_operations_cost_without_charge",
+  "section_break_21",
+  "total_additional_operation_cost",
+  "column_break_23",
+  "total_without_charges",
+  "wastage_charges_section",
+  "wastage_charges",
+  "section_break_27",
+  "total_amount",
+  "total_square_feet",
+  "rate_per_square_feet",
+  "column_break_31",
+  "wastage_area_in_square_feet",
+  "wastage_amount",
+  "finish_good_section",
+  "finish_good"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "BUDGET-"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending"
+  },
+  {
+   "fieldname": "opportunity",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Opportunity",
+   "options": "Opportunity",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval: !doc.created_item",
+   "fieldname": "create_item",
+   "fieldtype": "Button",
+   "label": "Create Item"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer_code",
+   "fieldtype": "Link",
+   "label": "Customer Code",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "customer_code.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "raw_material_from_customer",
+   "fieldtype": "Check",
+   "label": "Raw Material from Customer"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Budget BOM",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Budget BOM Details"
+  },
+  {
+   "fieldname": "budget_bom_details",
+   "fieldtype": "Table",
+   "label": "Item Details",
+   "options": "Budget BOM Details"
+  },
+  {
+   "fieldname": "additional_operations_cost_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Operations Cost"
+  },
+  {
+   "fieldname": "additional_operations_cost",
+   "fieldtype": "Table",
+   "label": "Additional Operations Cost",
+   "options": "Additional Operations Cost"
+  },
+  {
+   "fieldname": "section_break_15",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "data_1",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Data 1"
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "additional_operations_cost_without_charge_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Operations Cost"
+  },
+  {
+   "fieldname": "additional_operations_cost_without_charge",
+   "fieldtype": "Table",
+   "label": "Additional Operations Cost",
+   "options": "Additional Operations Cost Without Charge"
+  },
+  {
+   "fieldname": "section_break_21",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_additional_operation_cost",
+   "fieldtype": "Currency",
+   "label": "Total Additional Operation Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_without_charges",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "wastage_charges_section",
+   "fieldtype": "Section Break",
+   "label": "Wastage Charges"
+  },
+  {
+   "fieldname": "wastage_charges",
+   "fieldtype": "Table",
+   "label": "Wastage Charges",
+   "options": "Wastage Charges"
+  },
+  {
+   "fieldname": "section_break_27",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "precision": "9",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_square_feet",
+   "fieldtype": "Float",
+   "label": "Total Square Feet",
+   "precision": "9",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "rate_per_square_feet",
+   "fieldtype": "Float",
+   "label": "Rate per Square Feet",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_31",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "wastage_area_in_square_feet",
+   "fieldtype": "Float",
+   "label": "Wastage Area in Square Feet",
+   "precision": "9",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "wastage_amount",
+   "fieldtype": "Currency",
+   "label": "Wastage Amount",
+   "precision": "9",
+   "read_only": 1
+  },
+  {
+   "fieldname": "finish_good_section",
+   "fieldtype": "Section Break",
+   "label": "Finish Good"
+  },
+  {
+   "fieldname": "finish_good",
+   "fieldtype": "Table",
+   "label": "Finish Good",
+   "options": "Finish Good"
+  },
+  {
+   "fieldname": "column_break_14",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_raw_material_cost",
+   "fieldtype": "Currency",
+   "label": "Total Raw Material Cost",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_area_in_square_feet",
+   "fieldtype": "Float",
+   "label": "Total Area in Square Feet",
+   "precision": "9",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_weight",
+   "fieldtype": "Float",
+   "label": "Total Weight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_13",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_operations_cost",
+   "fieldtype": "Currency",
+   "label": "Total Operations Cost",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_operations_time",
+   "fieldtype": "Float",
+   "label": "Total Operations Time",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "created_item",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Created Item"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2022-02-07 13:39:56.520032",
+ "modified_by": "Administrator",
+ "module": "Momsfab",
+ "name": "Budget BOM",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -173,3 +173,32 @@ user_data_fields = [
 # 	"momsfab.auth.validate"
 # ]
 
+fixtures = [
+	{
+		"doctype": "Custom Field",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"Item-more_information",
+					"Item-sheet_thickness",
+					"Item-default_scale_factor",
+					"Item-scrap_rate",
+					"Item-sheet_density",
+
+					"Manufacturing Settings-common_values",
+					"Manufacturing Settings-scale_factor",
+					"Manufacturing Settings-margin",
+					"Manufacturing Settings-cutting_rate_per_minute",
+					"Manufacturing Settings-cb1",
+					"Manufacturing Settings-scrap_rate",
+					"Manufacturing Settings-wastage_rate",
+					"Manufacturing Settings-fuel_charge",
+
+
+				]
+			]
+		]
+	}
+]
