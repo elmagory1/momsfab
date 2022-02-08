@@ -19,22 +19,17 @@ class BudgetBOM(Document):
 
 	@frappe.whitelist()
 	def create_item(self):
-		created = False
-		if not self.finish_good:
-			frappe.throw("Please add Finish Good Item first")
-		for i in self.finish_good:
-			if not i.item_name:
-				frappe.throw("Please input valid item name")
-			obj = {
-				"doctype": "Item",
-				"item_code": i.item_name,
-				"item_name": i.item_name,
-				"item_group": "All Item Groups",
-			}
-			item = frappe.get_doc(obj).insert()
-			frappe.db.sql(""" UPDATE `tabFinish Good` SET item_code=%s WHERE name=%s """, (item.name, i.name))
-			frappe.db.commit()
-			created = True
-		if created:
-			frappe.db.sql(""" UPDATE `tabBudget BOM` SET created_item=1 WHERE name=%s """, self.name)
-			frappe.db.commit()
+		table_name = "finish_good"
+		obj = {
+			"doctype": "Item",
+			"item_code": self.opportunity + "_SHEET" ,
+			"item_name": self.opportunity + "_SHEET" ,
+			"description": self.opportunity + "_SHEET" ,
+			"stock_uom": "Nos"
+		}
+		item_created = frappe.get_doc(obj).insert()
+		self.__dict__[table_name][0].item_code = item_created.item_code
+		self.__dict__[table_name][0].item_name = item_created.item_name
+		self.__dict__[table_name][0].uom = item_created.stock_uom
+		frappe.db.sql(""" UPDATE `tabBudget BOM` SET created_item=1 WHERE name=%s """, self.name)
+		frappe.db.commit()
