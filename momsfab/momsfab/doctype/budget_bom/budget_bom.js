@@ -437,10 +437,10 @@ function compute_totals(cur_frm) {
         for(var x=0;x<cur_frm.doc[table].length;x+=1){
             total_raw_material_cost += (table !== 'pipe_estimation' ? cur_frm.doc[table][x].raw_material_cost : cur_frm.doc[table][x].total_amount)
             total_production_qty += cur_frm.doc[table][x].production_qty
-            if(table === 'Sheet Estimation'){
+            if(table === 'sheet_estimation'){
                 total_area_in_square_feet += cur_frm.doc[table][x].area_in_square_feet
             }
-            if(table !== 'Pipe Estimation') {
+            if(table !== 'pipe_estimation') {
                 total_weight += cur_frm.doc[table][x].weight_of_sheet
             }
             total_operations_cost += cur_frm.doc[table][x].operations_cost

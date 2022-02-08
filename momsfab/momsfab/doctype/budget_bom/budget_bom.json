@@ -325,7 +325,8 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "Sheet Estimation\nEngineering Estimation\nPipe Estimation"
+   "options": "\nSheet Estimation\nEngineering Estimation\nPipe Estimation",
+   "reqd": 1
   },
   {
    "default": "0",
@@ -361,7 +362,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-08 12:15:54.353630",
+ "modified": "2022-02-08 12:32:14.777761",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",
