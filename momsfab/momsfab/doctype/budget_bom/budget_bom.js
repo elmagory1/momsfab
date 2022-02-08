@@ -28,7 +28,7 @@ frappe.ui.form.on('Budget BOM', {
 	refresh: function(frm) {
         cur_frm.set_query("account", "additional_operations_cost_without_charge", () => {
             return {
-                query: "momsfab.doc_events.budget_bom.bb_query",
+                query: "momsfab.doc_events.budget_bom.bb_query_2",
                 // filters: [
                 //     ["account_type","=","Expenses Included In Valuation"],
                 //     [["Account",'delivery_charge','=',1 || "Account",'fuel_charge', '=',1]]
