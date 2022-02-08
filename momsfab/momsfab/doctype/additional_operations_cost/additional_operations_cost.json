@@ -34,6 +34,7 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Charge",
+   "precision": "9",
    "read_only": 1
   },
   {
@@ -62,7 +63,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-02-07 15:18:50.389070",
+ "modified": "2022-02-08 14:30:54.114396",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Additional Operations Cost",

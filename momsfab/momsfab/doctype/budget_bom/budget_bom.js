@@ -421,11 +421,11 @@ frappe.ui.form.on('Wastage Charges', {
 function compute_total_amounts(cur_frm) {
     var total_amount = cur_frm.doc.total_raw_material_cost + cur_frm.doc.total_operations_cost + cur_frm.doc.total_additional_operation_cost + cur_frm.doc.wastage_amount
     cur_frm.doc.total_amount = total_amount
-    cur_frm.doc.total_square_feet = cur_frm.doc.type === 'Sheet Estimation' ? cur_frm.doc.total_area_in_square_feet : cur_frm.doc.total_production_qty
+    cur_frm.doc.total_square_feet =  cur_frm.doc.total_area_in_square_feet
 
     if(total_amount > 0 && cur_frm.doc.total_square_feet > 0){
 
-            cur_frm.doc.rate_per_square_feet =  total_amount / cur_frm.doc.total_square_feet
+            cur_frm.doc.rate_per_square_feet =  total_amount / (cur_frm.doc.type === 'Sheet Estimation' ? cur_frm.doc.total_square_feet : cur_frm.doc.total_production_qty)
         cur_frm.refresh_field("rate_per_square_feet")
 
     }
@@ -492,7 +492,8 @@ function compute_operations_cost(cur_frm) {
     }
     cur_frm.doc.total =additional_operations_costs
     cur_frm.doc.total_without_charges = additional_operations_costs_without_charge
-    cur_frm.refresh_fields(["total","total_without_charges"])
+    cur_frm.doc.total_additional_operation_cost = additional_operations_costs_without_charge + additional_operations_costs
+    cur_frm.refresh_fields(["total","total_without_charges", "total_additional_operation_cost"])
     compute_total_amounts(cur_frm)
 }
 function compute_operations_cost_without_charges(cur_frm) {
@@ -504,13 +505,13 @@ function compute_operations_cost_without_charges(cur_frm) {
         }
     }
     if(cur_frm.doc.additional_operations_cost_without_charge) {
-
         for (var xx = 0; xx < cur_frm.doc.additional_operations_cost_without_charge.length; xx += 1) {
             additional_operations_costs_without_charge += cur_frm.doc.additional_operations_cost_without_charge[xx].amount
         }
     }
-    cur_frm.doc.total =additional_operations_costs
+    cur_frm.doc.total = additional_operations_costs
     cur_frm.doc.total_without_charges = additional_operations_costs_without_charge
-    cur_frm.refresh_fields(["total","total_without_charges"])
+    cur_frm.doc.total_additional_operation_cost = additional_operations_costs_without_charge + additional_operations_costs
+    cur_frm.refresh_fields(["total","total_without_charges", "total_additional_operation_cost"])
     compute_total_amounts(cur_frm)
 }
