@@ -28,16 +28,20 @@ frappe.ui.form.on('Budget BOM', {
 	refresh: function(frm) {
         cur_frm.set_query("account", "additional_operations_cost_without_charge", () => {
             return {
-                filters: {
-                    account_type: "Expenses Included In Valuation"
-                }
+                query: "momsfab.doc_events.budget_bom.bb_query",
+                // filters: [
+                //     ["account_type","=","Expenses Included In Valuation"],
+                //     [["Account",'delivery_charge','=',1 || "Account",'fuel_charge', '=',1]]
+                // ]
             }
         })
         cur_frm.set_query("account", "additional_operations_cost", () => {
-            return {
-                filters: {
-                    account_type: "Expenses Included In Valuation"
-                }
+           return {
+                query: "momsfab.doc_events.budget_bom.bb_query",
+                // filters: [
+                //     ["account_type","=","Expenses Included In Valuation"],
+                //     [["Account",'delivery_charge','=',1 || "Account",'fuel_charge', '=',1]]
+                // ]
             }
         })
         cur_frm.set_query("item", "wastage_charges", () => {
