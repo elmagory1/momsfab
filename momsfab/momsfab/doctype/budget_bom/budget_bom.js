@@ -33,6 +33,13 @@ frappe.ui.form.on('Budget BOM', {
                 }
             }
         })
+        cur_frm.set_query("account", "additional_operations_cost", () => {
+            return {
+                filters: {
+                    account_type: "Expenses Included In Valuation"
+                }
+            }
+        })
         cur_frm.set_query("item", "wastage_charges", () => {
             var items = []
             if(cur_frm.doc.sheet_estimation){
@@ -352,10 +359,16 @@ frappe.ui.form.on('Budget BOM Details Pipe Estimation', {
 frappe.ui.form.on('Additional Operations Cost Without Charge', {
 	amount: function(frm) {
         compute_operations_cost(cur_frm)
-	}
+	},
+     additional_operations_cost_without_charge_remove: function () {
+        compute_operations_cost(cur_frm)
+    },
 });
 
 frappe.ui.form.on('Additional Operations Cost', {
+    additional_operations_cost_remove: function () {
+        compute_operations_cost(cur_frm)
+    },
 	charge: function(frm, cdt, cdn) {
         var d = locals[cdt][cdn]
         if(d.delivery_charge){
@@ -393,6 +406,9 @@ frappe.ui.form.on('Wastage Charges', {
        var d = locals[cdt][cdn]
         d.area_in_square_feet = (d.length * d.width) / 92903
         cur_frm.refresh_field(d.parentfield)
+        compute_wastage_totals(cur_frm)
+	},
+    wastage_charges_remove: function(frm, cdt, cdn) {
         compute_wastage_totals(cur_frm)
 	}
 });
