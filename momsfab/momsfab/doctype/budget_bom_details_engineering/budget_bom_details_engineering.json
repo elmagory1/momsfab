@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2022-02-03 12:25:12.744491",
+ "creation": "2022-02-08 11:29:12.530420",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -13,7 +13,7 @@
   "thickness_of_sheet",
   "sheet_density",
   "weight_of_sheet",
-  "area_in_square_feet",
+  "production_qty",
   "column_break_9",
   "rate",
   "amount",
@@ -41,9 +41,7 @@
    "read_only": 1
   },
   {
-   "columns": 1,
    "default": "0",
-   "depends_on": "eval: parent.type != 'Pipe Estimation'",
    "fieldname": "length",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -85,17 +83,15 @@
   },
   {
    "default": "0",
-   "fieldname": "area_in_square_feet",
+   "fieldname": "production_qty",
    "fieldtype": "Float",
-   "label": "Area in Square Feet",
-   "precision": "9"
+   "label": "Production Qty"
   },
   {
    "fieldname": "column_break_9",
    "fieldtype": "Column Break"
   },
   {
-   "columns": 1,
    "default": "0",
    "fieldname": "rate",
    "fieldtype": "Currency",
@@ -154,10 +150,10 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-02-08 11:40:02.218829",
+ "modified": "2022-02-08 11:50:35.677980",
  "modified_by": "Administrator",
  "module": "Momsfab",
- "name": "Budget BOM Details",
+ "name": "Budget BOM Details Engineering",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

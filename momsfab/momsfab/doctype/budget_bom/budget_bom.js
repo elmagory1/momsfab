@@ -6,6 +6,8 @@ var cutting_rate_per_minute = 0
 var scrap_rate = 0
 var wastage_rate = 0
 var fuel_charge = 0
+var workstation = ""
+var operation = ""
 frappe.ui.form.on('Budget BOM', {
 	create_item: function(frm) {
 	     cur_frm.call({
@@ -24,11 +26,17 @@ frappe.ui.form.on('Budget BOM', {
         })
     },
 	refresh: function(frm) {
-
+        cur_frm.set_query("account", "additional_operations_cost_without_charge", () => {
+            return {
+                filters: {
+                    account_type: "Expenses Included In Valuation"
+                }
+            }
+        })
         cur_frm.set_query("item", "wastage_charges", () => {
             var items = []
-            if(cur_frm.doc.budget_bom_details){
-                items = Array.from(cur_frm.doc.budget_bom_details, x => "item_code" in x ? x.item_code:"")
+            if(cur_frm.doc.sheet_estimation){
+                items = Array.from(cur_frm.doc.sheet_estimation, x => "item_code" in x ? x.item_code:"")
             }
 
             return {
@@ -37,9 +45,7 @@ frappe.ui.form.on('Budget BOM', {
                 }
             }
         })
-	    if(!cur_frm.doc.finish_good){
-	         cur_frm.add_child("finish_good", {})
-        }
+
 	    if(cur_frm.is_new()){
 
 	        cur_frm.doc.created_item = 0
@@ -71,9 +77,134 @@ frappe.ui.form.on('Budget BOM', {
             .then(fuel_charge_value => {
               fuel_charge = fuel_charge_value
         })
-	}
+        frappe.db.get_single_value("Manufacturing Settings","workstation")
+            .then(w => {
+              workstation = w
+        })
+        frappe.db.get_single_value("Manufacturing Settings","operation")
+            .then(o => {
+              operation = o
+        })
+	},
+    onload_post_render: function () {
+	    console.log("onload post render")
+        if(!cur_frm.doc.finish_good){
+	         cur_frm.add_child("finish_good", {
+	             workstation: workstation,
+	             operation: operation,
+             })
+            cur_frm.refresh_field("finish_good")
+        }
+    }
 });
 frappe.ui.form.on('Budget BOM Details', {
+    sheet_estimation_remove: function () {
+        compute_totals(cur_frm)
+    },
+    item_code: function (frm, cdt, cdn) {
+        console.log("TEST")
+                var d = locals[cdt][cdn]
+        if(d.item_code){
+             cur_frm.call({
+            doc: cur_frm.doc,
+            method: 'get_rate',
+            args: {
+                item_code: d.item_code,
+            },
+            freeze: true,
+            freeze_message: "Get Templates...",
+            async:false,
+            callback: (r) => {
+                    d.rate = r.message
+                    cur_frm.refresh_field(d.parentfield)
+
+             }
+        })
+        }
+
+    },
+    length: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
+        d.weight_of_sheet = product * (1 + (scale_factor / 100))
+        d.amount =  d.weight_of_sheet * d.rate
+        d.margin_amount = d.amount * (margin / 100)
+        d.total_amount = d.amount * (1 + (margin / 100))
+        d.area_in_square_feet = (d.length * d.width) / 92903
+        d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    width: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
+        d.weight_of_sheet = product * (1 + (scale_factor / 100))
+                d.amount = d.weight_of_sheet * d.rate
+
+        d.total_amount = d.amount * (1 + (margin / 100))
+        d.area_in_square_feet = (d.length * d.width) / 92903
+                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    thickness_of_sheet: function(frm, cdt, cdn) {
+                var d = locals[cdt][cdn]
+
+        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
+        d.weight_of_sheet = product * (1 + (scale_factor / 100))
+               d.amount = d.weight_of_sheet * d.rate
+
+        d.total_amount = d.amount * (1 + (margin / 100))
+                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    sheet_density: function(frm, cdt, cdn) {
+                var d = locals[cdt][cdn]
+
+       var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
+        d.weight_of_sheet = product * (1 + (scale_factor / 100))
+                d.amount =  d.weight_of_sheet * d.rate
+
+        d.total_amount = d.amount * (1 + (margin / 100))
+                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    scrap: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+
+       var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
+        d.weight_of_sheet = product * (1 + (scale_factor / 100))
+                d.amount = d.weight_of_sheet * d.rate
+
+        d.total_amount = d.amount * (1 + (margin / 100))
+                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    cutting_time_in_minutes: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        d.operations_cost = (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    handling_time: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        d.operations_cost = (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	}
+});
+frappe.ui.form.on('Budget BOM Details Engineering', {
+    engineering_estimation_remove: function () {
+        compute_totals(cur_frm)
+    },
     item_code: function (frm, cdt, cdn) {
         console.log("TEST")
                 var d = locals[cdt][cdn]
@@ -103,10 +234,9 @@ frappe.ui.form.on('Budget BOM Details', {
         var d = locals[cdt][cdn]
         var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-        d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
+        d.amount =  d.weight_of_sheet * d.rate
         d.margin_amount = d.amount * (margin / 100)
-        d.total_amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.amount * (1 + (margin / 100)) : d.margin_amount + d.amount
-        d.area_in_square_feet = (d.length * d.width) / 92903
+        d.total_amount = d.amount * (1 + (margin / 100))
         d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
 
         cur_frm.refresh_field(d.parentfield)
@@ -116,11 +246,9 @@ frappe.ui.form.on('Budget BOM Details', {
         var d = locals[cdt][cdn]
         var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-                d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
-
+        d.amount =  d.weight_of_sheet * d.rate
         d.total_amount = d.amount * (1 + (margin / 100))
-        d.area_in_square_feet = (d.length * d.width) / 92903
-                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+        d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
 
         cur_frm.refresh_field(d.parentfield)
         compute_totals(cur_frm)
@@ -130,11 +258,9 @@ frappe.ui.form.on('Budget BOM Details', {
 
         var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-               d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
-
+        d.amount =  d.weight_of_sheet * d.rate
         d.total_amount = d.amount * (1 + (margin / 100))
-                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
-
+        d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
         cur_frm.refresh_field(d.parentfield)
         compute_totals(cur_frm)
 	},
@@ -143,10 +269,9 @@ frappe.ui.form.on('Budget BOM Details', {
 
        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-                d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
-
+        d.amount = d.weight_of_sheet * d.rate
         d.total_amount = d.amount * (1 + (margin / 100))
-                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+        d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
 
         cur_frm.refresh_field(d.parentfield)
         compute_totals(cur_frm)
@@ -156,10 +281,57 @@ frappe.ui.form.on('Budget BOM Details', {
 
        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
         d.weight_of_sheet = product * (1 + (scale_factor / 100))
-                d.amount = cur_frm.doc.type !== 'Pipe Estimation' ? d.weight_of_sheet * d.rate : d.production_qty * d.rate
-
+        d.amount = d.weight_of_sheet * d.rate
         d.total_amount = d.amount * (1 + (margin / 100))
-                d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+        d.raw_material_cost = d.total_amount - (d.weight_of_sheet * (d.scrap / 100) * scrap_rate)
+
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    cutting_time_in_minutes: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        d.operations_cost = (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	},
+    handling_time: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        d.operations_cost = (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
+        cur_frm.refresh_field(d.parentfield)
+        compute_totals(cur_frm)
+	}
+});
+frappe.ui.form.on('Budget BOM Details Pipe Estimation', {
+    pipe_estimation_remove: function () {
+        compute_totals(cur_frm)
+    },
+    item_code: function (frm, cdt, cdn) {
+        console.log("TEST")
+                var d = locals[cdt][cdn]
+        if(d.item_code){
+             cur_frm.call({
+            doc: cur_frm.doc,
+            method: 'get_rate',
+            args: {
+                item_code: d.item_code,
+            },
+            freeze: true,
+            freeze_message: "Get Templates...",
+            async:false,
+            callback: (r) => {
+                    d.rate = r.message
+                    cur_frm.refresh_field(d.parentfield)
+
+             }
+        })
+        }
+
+    },
+    production_qty: function(frm, cdt, cdn) {
+        var d = locals[cdt][cdn]
+        var product = d.length * d.width * d.thickness_of_sheet * d.sheet_density
+        d.amount =  d.production_qty * d.rate
+        d.total_amount = d.amount * (1 + (margin / 100))
 
         cur_frm.refresh_field(d.parentfield)
         compute_totals(cur_frm)
@@ -258,16 +430,23 @@ function compute_totals(cur_frm) {
     var total_operations_cost = 0
     var total_operations_time = 0
     var total_production_qty = 0
-        if(cur_frm.doc.budget_bom_details) {
-            for(var x=0;x<cur_frm.doc.budget_bom_details.length;x+=1){
-                total_raw_material_cost += cur_frm.doc.budget_bom_details[x].raw_material_cost
-                total_production_qty += cur_frm.doc.budget_bom_details[x].production_qty
-                total_area_in_square_feet += cur_frm.doc.budget_bom_details[x].area_in_square_feet
-                total_weight += cur_frm.doc.budget_bom_details[x].weight_of_sheet
-                total_operations_cost += cur_frm.doc.budget_bom_details[x].operations_cost
-                total_operations_time += (cur_frm.doc.budget_bom_details[x].cutting_time_in_minutes + cur_frm.doc.budget_bom_details[x].handling_time)
+    var table = cur_frm.doc.type === 'Sheet Estimation' ? "sheet_estimation" :
+                    cur_frm.doc.type === 'Engineering Estimation' ? "engineering_estimation" :
+                        cur_frm.doc.type === 'Pipe Estimation' ? "pipe_estimation": ""
+    if(cur_frm.doc[table]) {
+        for(var x=0;x<cur_frm.doc[table].length;x+=1){
+            total_raw_material_cost += (table !== 'pipe_estimation' ? cur_frm.doc[table][x].raw_material_cost : cur_frm.doc[table][x].total_amount)
+            total_production_qty += cur_frm.doc[table][x].production_qty
+            if(table === 'Sheet Estimation'){
+                total_area_in_square_feet += cur_frm.doc[table][x].area_in_square_feet
             }
+            if(table !== 'Pipe Estimation') {
+                total_weight += cur_frm.doc[table][x].weight_of_sheet
+            }
+            total_operations_cost += cur_frm.doc[table][x].operations_cost
+            total_operations_time += (cur_frm.doc[table][x].cutting_time_in_minutes + cur_frm.doc[table][x].handling_time)
         }
+    }
     cur_frm.doc.total_raw_material_cost = total_raw_material_cost
     cur_frm.doc.total_area_in_square_feet = total_area_in_square_feet
     cur_frm.doc.total_weight = total_weight
