@@ -35,6 +35,7 @@ doctype_js = {
 	"Quotation" : "public/js/quotation.js",
 	"Sales Order" : "public/js/sales_order.js",
 	"Material Request" : "public/js/material_request.js",
+	"Purchase Order" : "public/js/purchase_order.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -101,6 +102,21 @@ doc_events = {
 	"Sales Order": {
 		"on_submit": "momsfab.doc_events.sales_order.on_submit_so",
 		"on_cancel": "momsfab.doc_events.sales_order.on_cancel_so",
+	},
+	"Purchase Order": {
+		"on_submit": "momsfab.doc_events.purchase_order.on_submit_po",
+	},
+	"Purchase Invoice": {
+		"on_submit": "momsfab.doc_events.purchase_invoice.on_submit_pi",
+	},
+	"Purchase Receipt": {
+		"on_submit": "momsfab.doc_events.purchase_receipt.on_submit_pr",
+		"on_cancel": "momsfab.doc_events.purchase_receipt.on_cancel_pr",
+	},
+	"Material Request": {
+		"validate": "momsfab.doc_events.material_request.validate_mr",
+		"on_submit": "momsfab.doc_events.material_request.on_submit_mr",
+		"on_cancel": "momsfab.doc_events.material_request.cancel_mr",
 	},
 }
 
