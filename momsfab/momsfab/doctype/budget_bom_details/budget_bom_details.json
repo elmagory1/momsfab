@@ -8,6 +8,7 @@
  "field_order": [
   "item_code",
   "item_name",
+  "stock_uom",
   "length",
   "width",
   "thickness_of_sheet",
@@ -149,12 +150,19 @@
    "fieldtype": "Currency",
    "label": "Operations Cost",
    "read_only": 1
+  },
+  {
+   "fetch_from": "item_code.stock_uom",
+   "fieldname": "stock_uom",
+   "fieldtype": "Link",
+   "label": "Stock UOM",
+   "options": "UOM"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-02-08 11:40:02.218829",
+ "modified": "2022-02-09 13:57:46.912722",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM Details",

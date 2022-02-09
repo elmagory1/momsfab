@@ -8,6 +8,9 @@ var wastage_rate = 0
 var fuel_charge = 0
 var workstation = ""
 var operation = ""
+
+var has_quotation = false
+var generating_quotation = false
 frappe.ui.form.on('Budget BOM', {
 	create_item: function(frm) {
 	     cur_frm.call({
@@ -26,6 +29,20 @@ frappe.ui.form.on('Budget BOM', {
         })
     },
 	refresh: function(frm) {
+	    if(!generating_quotation){
+	        cur_frm.call({
+                doc: cur_frm.doc,
+                method: 'get_quotation',
+                args: {},
+                freeze: true,
+                freeze_message: "Get Quotation...",
+                async:false,
+                callback: (r) => {
+                    console.log("HAS QUOTATION")
+                    has_quotation = r.message
+                }
+            })
+        }
         cur_frm.set_query("account", "additional_operations_cost_without_charge", () => {
             return {
                 query: "momsfab.doc_events.budget_bom.bb_query_2",
@@ -58,7 +75,6 @@ frappe.ui.form.on('Budget BOM', {
         })
 
 	    if(cur_frm.is_new()){
-
 	        cur_frm.doc.created_item = 0
             cur_frm.refresh_field("created_item")
         }
@@ -96,10 +112,28 @@ frappe.ui.form.on('Budget BOM', {
             .then(o => {
               operation = o
         })
+
+        if(cur_frm.doc.docstatus && cur_frm.doc.status === "In Progress" && !has_quotation){
+
+	            cur_frm.add_custom_button(__("Quotation"), () => {
+                    cur_frm.call({
+                        doc: cur_frm.doc,
+                        method: 'generate_quotation',
+                        args: {},
+                        freeze: true,
+                        freeze_message: "Generating Quotation...",
+                        callback: (r) => {
+                            generating_quotation = true
+                            cur_frm.reload_doc()
+                            frappe.set_route("Form", "Quotation", r.message);
+                        }
+                    })
+                })
+        }
 	},
     onload_post_render: function () {
 	    console.log("onload post render")
-        if(!cur_frm.doc.finish_good){
+        if(cur_frm.doc.finish_good.length === 0){
 	         cur_frm.add_child("finish_good", {
 	             workstation: workstation,
 	             operation: operation,

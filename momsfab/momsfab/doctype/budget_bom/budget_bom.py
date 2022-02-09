@@ -25,11 +25,57 @@ class BudgetBOM(Document):
 			"item_code": self.opportunity + "_SHEET" ,
 			"item_name": self.opportunity + "_SHEET" ,
 			"description": self.opportunity + "_SHEET" ,
-			"stock_uom": "Nos"
+			"stock_uom": "Nos",
+			"item_group": "All Item Groups"
 		}
 		item_created = frappe.get_doc(obj).insert()
-		self.__dict__[table_name][0].item_code = item_created.item_code
-		self.__dict__[table_name][0].item_name = item_created.item_name
-		self.__dict__[table_name][0].uom = item_created.stock_uom
+		frappe.db.sql(""" UPDATE `tabFinish Good` SET item_code=%s,item_name=%s,uom=%s WHERE parent=%s """, (item_created.name,item_created.item_name,item_created.stock_uom, self.name))
+		frappe.db.commit()
 		frappe.db.sql(""" UPDATE `tabBudget BOM` SET created_item=1 WHERE name=%s """, self.name)
 		frappe.db.commit()
+
+	@frappe.whitelist()
+	def generate_quotation(self):
+		obj = {
+			"doctype": "Quotation",
+			"quotation_to": "Customer",
+			"transaction_date": self.posting_date,
+			"valid_till": self.posting_date,
+			"party_name": self.customer_code,
+			"budget_bom_reference": [{
+				"budget_bom": self.name
+			}],
+			"budget_bom_opportunity": [{
+				"opportunity": self.opportunity
+			}],
+			"items": self.get_quotation_items(),
+			"additional_operating_cost": self.total_additional_operation_cost
+		}
+		quotation = frappe.get_doc(obj).insert()
+		# frappe.db.sql(""" UPDATE `tabBudget BOM` SET status='Quotation In Progress'  WHERE name=%s """,
+		# 			  self.name)
+		# frappe.db.commit()
+		return quotation.name
+
+	@frappe.whitelist()
+	def get_quotation_items(self):
+		items = []
+		for i in self.finish_good:
+			items.append({
+				"item_code": i.item_code,
+				"item_name": i.item_name,
+				"description": i.item_name,
+				"qty": i.qty,
+				"uom": i.uom,
+			})
+		return items
+
+	@frappe.whitelist()
+	def get_quotation(self):
+		quotation = frappe.db.sql(""" 
+	                          SELECT COUNT(*) as count, Q.docstatus
+	                           FROM tabQuotation as Q
+	                           INNER JOIN `tabBudget BOM References` as BBR ON BBR.parent = Q.name
+	                          WHERE BBR.budget_bom=%s and Q.docstatus < 2""", self.name, as_dict=1)
+
+		return quotation[0].count > 0

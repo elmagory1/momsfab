@@ -63,10 +63,12 @@
    "options": "BUDGET-"
   },
   {
+   "default": "In Progress",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Pending"
+   "options": "In Progress\nTo Quotation\nQuotation In Progress\nTo Material Request\nTo BOM",
+   "read_only": 1
   },
   {
    "fieldname": "opportunity",
@@ -77,7 +79,7 @@
    "reqd": 1
   },
   {
-   "depends_on": "eval: !doc.created_item",
+   "depends_on": "eval: !doc.created_item && !cur_frm.is_dirty()",
    "fieldname": "create_item",
    "fieldtype": "Button",
    "label": "Create Item"
@@ -365,7 +367,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-08 14:33:50.391843",
+ "modified": "2022-02-09 14:00:30.973862",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",
