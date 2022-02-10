@@ -133,6 +133,11 @@ frappe.ui.form.on('Budget BOM', {
                         }
                     })
                 })
+        } else if(cur_frm.doc.docstatus && cur_frm.doc.status === "To Material Request" ){
+
+                frm.add_custom_button(__("Material Request"), () => {
+                    cur_frm.trigger("material_request")
+                })
         }
         if(!check_bom) {
                     frm.add_custom_button(__("Create BOM"), () => {
@@ -152,6 +157,13 @@ frappe.ui.form.on('Budget BOM', {
                         })
                     })
                 }
+	},
+     material_request: function(frm) {
+       frappe.model.open_mapped_doc({
+			method: "momsfab.momsfab.doctype.budget_bom.budget_bom.make_mr",
+			frm: cur_frm
+		})
+
 	},
     onload_post_render: function () {
 	    console.log("onload post render")

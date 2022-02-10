@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.model.mapper import get_mapped_doc
 
 class BudgetBOM(Document):
 	@frappe.whitelist()
@@ -64,9 +65,10 @@ class BudgetBOM(Document):
 			items.append({
 				"item_code": i.item_code,
 				"item_name": i.item_name,
-				"description": i.item_name,
+				"description": i.item_name + "<br> Wastage Amount = " + str(self.wastage_amount ),
 				"qty": i.qty,
 				"uom": i.uom,
+				"rate": self.total_amount
 			})
 		return items
 
@@ -178,3 +180,31 @@ class BudgetBOM(Document):
 			items.append(obj)
 
 		return items
+
+@frappe.whitelist()
+def make_mr(source_name, target_doc=None):
+	doc = get_mapped_doc("Budget BOM", source_name, {
+		"Budget BOM": {
+			"doctype": "Material Request",
+			"validation": {
+				"docstatus": ["=", 1]
+			},
+			"field_map": {
+				"posting_Date": "schedule_date",
+			}
+		},
+		"Budget BOM Raw Material": {
+			"doctype": "Material Request Item",
+			"field_map":{
+				"name": "budget_bom_raw_material",
+			}
+		}
+
+	}, ignore_permissions=True)
+	doc.schedule_date = str(frappe.db.get_value("Budget BOM", source_name, "expected_closing_date"))
+	for i in doc.items:
+		i.schedule_date = str(frappe.db.get_value("Budget BOM", source_name, "expected_closing_date"))
+	doc.append("budget_bom_reference", {
+		"budget_bom": source_name
+	})
+	return doc

@@ -140,3 +140,76 @@ def make_work_orders(items, sales_order, company, project=None):
         out.append(work_order)
 
     return [p.name for p in out]
+
+@frappe.whitelist()
+def get_budget_bom(a,b,c,d,e,f):
+    data = []
+
+    bb =  frappe.db.sql(""" SELECT budget_bom as name FROM `tabBudget BOM References` WHERE parent=%s""",f['parent'],as_dict=1)
+    for i in bb:
+        mr = frappe.db.sql(""" SELECT * FROM `tabBudget BOM References` WHERE parenttype='Material Request' and budget_bom=%s and docstatus=1""",i.name,as_dict=1)
+        if len(mr) == 0:
+            data.append(i)
+
+    return data
+
+
+@frappe.whitelist()
+def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
+    data = json.loads(budget_boms)
+    doc = get_mapped_doc("Sales Order", so_name, {
+        "Sales Order": {
+            "doctype": "Material Request",
+            "validation": {
+                "docstatus": ["=", 1]
+            }
+        }
+    }, ignore_permissions=True)
+    doc.schedule_date = schedule_date
+    doc.transaction_date = transaction_date
+    doc.items = []
+    for x in data:
+        bb_doc = get_mapped_doc("Budget BOM", x, {
+            "Budget BOM": {
+                "doctype": "Material Request",
+                "validation": {
+                    "docstatus": ["=", 1]
+                }
+            },
+            "Budget BOM Raw Material": {
+                "doctype": "Material Request Item",
+                "field_map": {
+                    "name": "budget_bom_raw_material"
+                }
+            },
+            "Budget BOM Enclosure Raw Material": {
+                "doctype": "Material Request Item",
+                "field_map": {
+                    "name": "budget_bom_raw_material",
+                    "discount_rate": "budget_bom_rate"
+                }
+            },
+            "Budget BOM Raw Material Modifier": {
+                "doctype": "Material Request Item",
+                "field_map": {
+                    "name": "budget_bom_raw_material",
+                    "discount_rate": "budget_bom_rate"
+                }
+            }
+        })
+        bb_document = frappe.get_doc("Budget BOM", x)
+        so = frappe.get_doc("Sales Order", so_name)
+        qty = check_qty(bb_document.fg_sellable_bom_details[0].item_code, so.items)
+
+        for xx in bb_doc.items:
+            xx.qty = xx.qty * qty
+            doc.items.append(xx)
+
+        for i in doc.items:
+            i.schedule_date = transaction_date
+            available_qty = get_balance_qty(i.item_code, i.warehouse)
+            i.required_qty = i.qty - available_qty
+
+        doc.items = consolidate_items(doc.items)
+    mr = doc.insert()
+    return mr.name

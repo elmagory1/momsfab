@@ -67,7 +67,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "In Progress\nTo Quotation\nQuotation In Progress\nTo Material Request\nTo BOM",
+   "options": "In Progress\nTo Quotation\nQuotation In Progress\nTo Material Request\nTo BOM\nTo Quotation",
    "read_only": 1
   },
   {
@@ -367,7 +367,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-09 14:00:30.973862",
+ "modified": "2022-02-10 13:10:40.185389",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",

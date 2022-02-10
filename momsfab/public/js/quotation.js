@@ -101,6 +101,7 @@ function fetch_boms(cur_frm, selections) {
                                         "item_name": doc.finish_good[ii].item_name,
                                         "qty": doc.finish_good[ii].qty,
                                         "uom": doc.finish_good[ii].uom,
+                                        "rate": doc.total_amount
                                   })
                                 cur_frm.refresh_field("items")
                             }
