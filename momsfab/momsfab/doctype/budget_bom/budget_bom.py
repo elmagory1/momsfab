@@ -193,22 +193,27 @@ def make_mr(source_name, target_doc=None):
 				"posting_Date": "schedule_date",
 			}
 		},
-		"Budget BOM Details": {
+	 	"Budget BOM Details": {
 			"doctype": "Material Request Item",
 			"field_map": {
-				"name": "budget_bom_raw_material"
+				"name": "budget_bom_raw_material",
+				"weight_of_sheet": "qty"
+
 			}
 		},
 		"Budget BOM Details Engineering": {
 			"doctype": "Material Request Item",
 			"field_map": {
-				"name": "budget_bom_raw_material"
-			}
+				"name": "budget_bom_raw_material",
+				"weight_of_sheet": "qty"
+
+		 }
 		},
 		"Budget BOM Details Pipe Estimation": {
 			"doctype": "Material Request Item",
 			"field_map": {
-				"name": "budget_bom_raw_material"
+				"name": "budget_bom_raw_material",
+				"production_qty": "qty"
 			}
 		}
 
