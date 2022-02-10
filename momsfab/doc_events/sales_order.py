@@ -178,24 +178,22 @@ def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
                     "docstatus": ["=", 1]
                 }
             },
-            "Budget BOM Raw Material": {
+            "Budget BOM Details": {
                 "doctype": "Material Request Item",
                 "field_map": {
                     "name": "budget_bom_raw_material"
                 }
             },
-            "Budget BOM Enclosure Raw Material": {
+            "Budget BOM Details Engineering": {
                 "doctype": "Material Request Item",
                 "field_map": {
-                    "name": "budget_bom_raw_material",
-                    "discount_rate": "budget_bom_rate"
+                    "name": "budget_bom_raw_material"
                 }
             },
-            "Budget BOM Raw Material Modifier": {
+            "Budget BOM Details Pipe Estimation": {
                 "doctype": "Material Request Item",
                 "field_map": {
-                    "name": "budget_bom_raw_material",
-                    "discount_rate": "budget_bom_rate"
+                    "name": "budget_bom_raw_material"
                 }
             }
         })

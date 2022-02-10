@@ -14,6 +14,13 @@ var generating_quotation = false
 var check_bom = false
 
 frappe.ui.form.on('Budget BOM', {
+	type: function(frm) {
+
+	    cur_frm.clear_table("sheet_estimation")
+	    cur_frm.clear_table("engineering_estimation")
+	    cur_frm.clear_table("pipe_estimation")
+        cur_frm.refresh_fields(['sheet_estimation','engineering_estimation','pipe_estimation'])
+    },
 	create_item: function(frm) {
 	     cur_frm.call({
             doc: cur_frm.doc,

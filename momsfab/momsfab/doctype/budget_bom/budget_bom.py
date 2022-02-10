@@ -193,10 +193,22 @@ def make_mr(source_name, target_doc=None):
 				"posting_Date": "schedule_date",
 			}
 		},
-		"Budget BOM Raw Material": {
+		"Budget BOM Details": {
 			"doctype": "Material Request Item",
-			"field_map":{
-				"name": "budget_bom_raw_material",
+			"field_map": {
+				"name": "budget_bom_raw_material"
+			}
+		},
+		"Budget BOM Details Engineering": {
+			"doctype": "Material Request Item",
+			"field_map": {
+				"name": "budget_bom_raw_material"
+			}
+		},
+		"Budget BOM Details Pipe Estimation": {
+			"doctype": "Material Request Item",
+			"field_map": {
+				"name": "budget_bom_raw_material"
 			}
 		}
 
