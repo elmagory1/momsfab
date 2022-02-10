@@ -95,6 +95,10 @@ doctype_js = {
 # Hook on document methods and events
 
 doc_events = {
+	"Stock Entry": {
+		"on_submit": "momsfab.doc_events.stock_entry.on_submit_se",
+		"validate": "momsfab.doc_events.stock_entry.on_save_se",
+	},
 	"Quotation": {
 		"on_submit": "momsfab.doc_events.quotation.submit_q",
 		"on_cancel": "momsfab.doc_events.quotation.submit_q",
