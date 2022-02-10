@@ -182,6 +182,7 @@ def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
                 "doctype": "Material Request Item",
                 "field_map": {
                     "name": "budget_bom_raw_material"
+
                 }
             },
             "Budget BOM Details Engineering": {
@@ -202,6 +203,8 @@ def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
         qty = check_qty(bb_document.finish_good[0].item_code, so.items)
 
         for xx in bb_doc.items:
+            if not xx.qty:
+                xx.qty = 1
             xx.qty = xx.qty * qty
             doc.items.append(xx)
 

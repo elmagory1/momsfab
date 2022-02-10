@@ -215,6 +215,8 @@ def make_mr(source_name, target_doc=None):
 	}, ignore_permissions=True)
 	doc.schedule_date = str(frappe.db.get_value("Budget BOM", source_name, "posting_Date"))
 	for i in doc.items:
+		if not i.qty:
+			i.qty = 1
 		i.schedule_date = str(frappe.db.get_value("Budget BOM", source_name, "posting_Date"))
 	doc.append("budget_bom_reference", {
 		"budget_bom": source_name
