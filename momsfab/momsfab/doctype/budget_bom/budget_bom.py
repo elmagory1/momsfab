@@ -71,6 +71,15 @@ class BudgetBOM(Document):
 		return items
 
 	@frappe.whitelist()
+	def check_bom(self):
+		bom = frappe.db.sql(""" 
+	                           SELECT COUNT(*) as count
+	                            FROM tabBOM
+	                           WHERE budget_bom=%s and docstatus < 2""", self.name, as_dict=1)
+
+		return bom[0].count > 0
+
+	@frappe.whitelist()
 	def get_quotation(self):
 		quotation = frappe.db.sql(""" 
 	                          SELECT COUNT(*) as count, Q.docstatus
@@ -79,3 +88,93 @@ class BudgetBOM(Document):
 	                          WHERE BBR.budget_bom=%s and Q.docstatus < 2""", self.name, as_dict=1)
 
 		return quotation[0].count > 0
+
+	@frappe.whitelist()
+	def create_bom(self):
+		if self.type == "Sheet Estimation":
+			self.create_sheet_estimation_bom()
+
+		elif self.type == "Engineering Estimation":
+			self.create_engineering_estimation_bom()
+
+		elif self.type == "Pipe Estimation":
+			self.create_pip_estimation_bom()
+
+	@frappe.whitelist()
+	def create_sheet_estimation_bom(self):
+
+		for i in self.finish_good:
+			obj = {
+				"doctype": "BOM",
+				"item": i.item_code,
+				"budget_bom": self.name,
+				"with_operations": 1,
+				"quantity": i.qty,
+				"items": self.get_raw_materials("sheet_estimation"),
+				"operations": [{
+					"operation": i.operation,
+					"workstation": i.workstation,
+					"time_in_mins": self.total_operations_time,
+					"operating_cost": self.total_operations_cost,
+				}]
+			}
+			print("OBJEEEEEEEEEECT")
+			print(obj)
+			bom = frappe.get_doc(obj).insert()
+			bom.submit()
+
+	@frappe.whitelist()
+	def create_engineering_estimation_bom(self):
+		for i in self.finish_good:
+			obj = {
+				"doctype": "BOM",
+				"item": i.item_code,
+				"budget_bom": self.name,
+				"quantity": i.qty,
+				"with_operations": 1,
+				"items": self.get_raw_materials("engineering_estimation"),
+				"operations": [{
+					"operation": i.operation,
+					"workstation": i.workstation,
+					"time_in_mins": self.total_operations_time,
+					"operating_cost": self.total_operations_cost,
+				}]
+			}
+			bom = frappe.get_doc(obj).insert()
+			bom.submit()
+
+	@frappe.whitelist()
+	def create_pip_estimation_bom(self):
+		for i in self.finish_good:
+			obj = {
+				"doctype": "BOM",
+				"item": i.item_code,
+				"quantity": i.qty,
+				"with_operations": 1,
+				"budget_bom": self.name,
+				"items": self.get_raw_materials("pipe_estimation"),
+				"operations": [{
+					"operation": i.operation,
+					"workstation": i.workstation,
+					"time_in_mins": self.total_operations_time,
+					"operating_cost": self.total_operations_cost,
+				}]
+			}
+			bom = frappe.get_doc(obj).insert()
+			bom.submit()
+
+	@frappe.whitelist()
+	def get_raw_materials(self, raw_material):
+		items = []
+		for i in self.__dict__[raw_material]:
+			obj = {
+				"item_code": i.item_code,
+				"item_name": i.item_name,
+				"rate": i.rate if 'rate' in i.__dict__ else 0,
+				"qty":  1,
+				"amount": i.amount,
+			}
+
+			items.append(obj)
+
+		return items

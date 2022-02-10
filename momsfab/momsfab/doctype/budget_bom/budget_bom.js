@@ -11,6 +11,8 @@ var operation = ""
 
 var has_quotation = false
 var generating_quotation = false
+var check_bom = false
+
 frappe.ui.form.on('Budget BOM', {
 	create_item: function(frm) {
 	     cur_frm.call({
@@ -21,9 +23,6 @@ frappe.ui.form.on('Budget BOM', {
             freeze_message: "Creating Item...",
             async:false,
             callback: (r) => {
-                // if(cur_frm.is_dirty()){
-                //     cur_frm.save()
-                //  }
                 cur_frm.reload_doc()
              }
         })
@@ -43,22 +42,27 @@ frappe.ui.form.on('Budget BOM', {
                 }
             })
         }
+        cur_frm.call({
+                doc: cur_frm.doc,
+                method: 'check_bom',
+                args: {},
+                freeze: true,
+                freeze_message: "Checking Sales Order...",
+                async:false,
+                callback: (r) => {
+                    check_bom= r.message
+                }
+            })
         cur_frm.set_query("account", "additional_operations_cost_without_charge", () => {
             return {
                 query: "momsfab.doc_events.budget_bom.bb_query_2",
-                // filters: [
-                //     ["account_type","=","Expenses Included In Valuation"],
-                //     [["Account",'delivery_charge','=',1 || "Account",'fuel_charge', '=',1]]
-                // ]
+
             }
         })
         cur_frm.set_query("account", "additional_operations_cost", () => {
            return {
                 query: "momsfab.doc_events.budget_bom.bb_query",
-                // filters: [
-                //     ["account_type","=","Expenses Included In Valuation"],
-                //     [["Account",'delivery_charge','=',1 || "Account",'fuel_charge', '=',1]]
-                // ]
+
             }
         })
         cur_frm.set_query("item", "wastage_charges", () => {
@@ -130,6 +134,24 @@ frappe.ui.form.on('Budget BOM', {
                     })
                 })
         }
+        if(!check_bom) {
+                    frm.add_custom_button(__("Create BOM"), () => {
+                        cur_frm.call({
+                            doc: cur_frm.doc,
+                            method: 'create_bom',
+                            args: {},
+                            freeze: true,
+                            freeze_message: "Creating BOM...",
+                            callback: (r) => {
+                                cur_frm.reload_doc()
+                                frappe.show_alert({
+                                    message: __('BOMs Created'),
+                                    indicator: 'green'
+                                }, 3);
+                            }
+                        })
+                    })
+                }
 	},
     onload_post_render: function () {
 	    console.log("onload post render")
