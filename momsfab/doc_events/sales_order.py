@@ -1,5 +1,7 @@
 import frappe, json
 from frappe.utils import add_days, cint, cstr, flt, get_link_to_form, getdate, nowdate, strip_html
+from erpnext.stock.stock_ledger import get_previous_sle
+from frappe.model.mapper import get_mapped_doc
 
 def on_submit_so(doc, method):
     if not doc.cost_center:
@@ -213,3 +215,39 @@ def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
         doc.items = consolidate_items(doc.items)
     mr = doc.insert()
     return mr.name
+
+def get_balance_qty(item_code, warehouse):
+    time = frappe.utils.now_datetime().time()
+    date = frappe.utils.now_datetime().date()
+    previous_sle = get_previous_sle({
+        "item_code": item_code,
+        "warehouse": warehouse,
+        "posting_date": date,
+        "posting_time": time
+    })
+    balance = previous_sle.get("qty_after_transaction") or 0
+    return balance
+
+def check_qty(item_code, items):
+    for i in items:
+        if i.item_code == item_code:
+            return i.qty
+    return 1
+def consolidate_items(items):
+    c_items = []
+    for i in items:
+        add = False
+        for x in c_items:
+            if i.item_code == x.item_code:
+                if 'type' in i.__dict__ and i.type:
+                    if i.type == 'Deletion':
+                        x.qty -= i.qty
+                    else:
+                        x.qty += i.qty
+                else:
+                    x.qty += i.qty
+                add = True
+        if not add:
+            c_items.append(i)
+
+    return c_items
