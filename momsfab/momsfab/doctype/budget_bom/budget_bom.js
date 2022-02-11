@@ -84,20 +84,18 @@ frappe.ui.form.on('Budget BOM', {
                 }
             }
         })
-        cur_frm.set_query("item", "sheet_estimation", () => {
-            if(cur_frm.doc.type === "Customer"){
+        cur_frm.set_query("item_code", "sheet_estimation", () => {
+            if(cur_frm.doc.type === "Own"){
                 return;
             }
-
             return {
                 filters: {
-                                        is_service_item: ['=', 1]
-
+                    is_service_item: ['=', 1]
                 }
             }
         })
-            cur_frm.set_query("item", "pipe_estimation", () => {
-            if(cur_frm.doc.type === "Customer"){
+            cur_frm.set_query("item_code", "pipe_estimation", () => {
+            if(cur_frm.doc.type === "Own"){
                 return;
             }
 
@@ -107,14 +105,14 @@ frappe.ui.form.on('Budget BOM', {
                 }
             }
         })
-        cur_frm.set_query("item", "engineering_estimation", () => {
-            if(cur_frm.doc.type === "Customer"){
+        cur_frm.set_query("item_code", "engineering_estimation", () => {
+            if(cur_frm.doc.type === "Own"){
                 return;
             }
 
             return {
                 filters: {
-                                        is_service_item: ['=', 1]
+                    is_service_item: ['=', 1]
 
                 }
             }

@@ -116,7 +116,8 @@
    "fieldname": "raw_material_from_customer",
    "fieldtype": "Select",
    "label": "Raw Material from",
-   "options": "\nCustomer\nOwn"
+   "options": "\nCustomer\nOwn",
+   "reqd": 1
   },
   {
    "fieldname": "amended_from",
@@ -369,7 +370,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-10 15:26:54.827342",
+ "modified": "2022-02-11 12:04:55.765014",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",
