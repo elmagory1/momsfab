@@ -188,7 +188,7 @@ class BudgetBOM(Document):
 				"item_code": i.item_code,
 				"item_name": i.item_name,
 				"rate": i.rate if 'rate' in i.__dict__ else 0,
-				"qty":  1,
+				"qty":  i.weight_of_sheet if 'weight_of_sheet' in i.__dict__ else i.production_qty,
 				"amount": i.amount,
 			}
 
