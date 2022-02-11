@@ -11,3 +11,14 @@ def bb_query(doctype, txt, searchfield, start, page_len, filters):
 def bb_query_2(doctype, txt, searchfield, start, page_len, filters):
     return frappe.db.sql("""
           SELECT name FROm `tabAccount` WHERE account_type='Expenses Included In Valuation'""")
+
+
+
+@frappe.whitelist()
+@frappe.validate_and_sanitize_search_inputs
+def get_wastages_query(doctype, txt, searchfield, start, page_len, filters):
+    return frappe.db.sql("""
+          SELECT name FROm `tabAccount` WHERE account_type='Expenses Included In Valuation'""")
+
+
+

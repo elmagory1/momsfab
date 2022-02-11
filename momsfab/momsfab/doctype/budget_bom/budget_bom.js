@@ -74,13 +74,20 @@ frappe.ui.form.on('Budget BOM', {
         })
         cur_frm.set_query("item", "wastage_charges", () => {
             var items = []
-            if(cur_frm.doc.sheet_estimation){
-                items = Array.from(cur_frm.doc.sheet_estimation, x => "item_code" in x ? x.item_code:"")
-            }
+            var wastages = Array.from(cur_frm.doc.wastage_charges, x => "item" in x ? x.item:"")
 
+            if(cur_frm.doc.sheet_estimation.length > 0){
+                items = Array.from(cur_frm.doc.sheet_estimation, x => "item_code" in x && !(wastages.includes(x.item_code))? x.item_code:"")
+            }
+            else if(cur_frm.doc.engineering_estimation.length > 0){
+                items = Array.from(cur_frm.doc.engineering_estimation, x => "item_code" in x && !(wastages.includes(x.item_code))? x.item_code:"")
+            }
+            else if(cur_frm.doc.pipe_estimation.length > 0){
+                items = Array.from(cur_frm.doc.pipe_estimation, x => "item_code" in x && !(wastages.includes(x.item_code))? x.item_code:"")
+            }
             return {
                 filters: {
-                    name: ['in', items]
+                    name: ['in', items],
                 }
             }
         })
