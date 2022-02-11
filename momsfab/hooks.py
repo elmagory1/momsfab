@@ -227,7 +227,7 @@ fixtures = [
 					"Account-fuel_charge",
 					"Account-delivery_charge",
 
-
+					"Item-is_service_item"
 
 				]
 			]

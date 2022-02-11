@@ -84,35 +84,22 @@ function fetch_boms(cur_frm, selections) {
         cur_frm.clear_table("items")
         cur_frm.refresh_field("items")
     }
-    for(var ii=0;ii<selections.length;ii+=1){
-        frappe.db.get_doc("Budget BOM",selections[ii])
-            .then(doc => {
-                cur_frm.add_child("budget_bom_reference",{
-                    budget_bom: doc.name
-                })
-                    cur_frm.refresh_field("budget_bom_reference")
-
-                var field = doc.type === 'Sheet Estimation' ? "sheet_estimation" :
-                                doc.type === 'Engineering Estimation' ? "engineering_estimation" :
-                                    doc.type === 'Pipe Estimation' ? "pipe_estimation": ""
-
-                for(var i=0;i<doc[field].length;i+=1) {
-                    if (!check_items(doc[field][i], cur_frm)) {
-                        cur_frm.add_child("items", {
-                            item_code: doc[field][i].item_code,
-                            item_name: doc[field][i].item_name,
-                            description: doc[field][i].item_name,
-                            qty: doc[field][i].qty,
-                            uom: doc[field][i].stock_uom,
-                            conversion_factor:1,
-                            stock_uom: doc[field][i].stock_uom,
-                            rate: doc[field][i].rate,
-                            budget_bom_rate: doc[field][i].rate,
-                        })
-                        cur_frm.refresh_field("items")
+   if(selections.length > 0){
+        frappe.call({
+            method: "momsfab.doc_events.material_request.get_bb",
+            args: {
+                mr: selections
+            },
+            callback: function (r) {
+                    for(var x=0;x<r.message[0].length;x+=1){
+                        cur_frm.add_child("items",r.message[0][x])
+                        cur_frm.refresh_fields("items")
                     }
-                }
-
+                    for(var x=0;x<r.message[1].length;x+=1){
+                        cur_frm.add_child("budget_bom_reference",r.message[1][x])
+                        cur_frm.refresh_fields("budget_bom_reference")
+                    }
+            }
         })
     }
 }

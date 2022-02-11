@@ -84,7 +84,41 @@ frappe.ui.form.on('Budget BOM', {
                 }
             }
         })
+        cur_frm.set_query("item", "sheet_estimation", () => {
+            if(cur_frm.doc.type === "Customer"){
+                return;
+            }
 
+            return {
+                filters: {
+                                        is_service_item: ['=', 1]
+
+                }
+            }
+        })
+            cur_frm.set_query("item", "pipe_estimation", () => {
+            if(cur_frm.doc.type === "Customer"){
+                return;
+            }
+
+            return {
+                filters: {
+                    is_service_item: ['=', 1]
+                }
+            }
+        })
+        cur_frm.set_query("item", "engineering_estimation", () => {
+            if(cur_frm.doc.type === "Customer"){
+                return;
+            }
+
+            return {
+                filters: {
+                                        is_service_item: ['=', 1]
+
+                }
+            }
+        })
 	    if(cur_frm.is_new()){
 	        cur_frm.doc.created_item = 0
             cur_frm.refresh_field("created_item")
@@ -140,13 +174,13 @@ frappe.ui.form.on('Budget BOM', {
                         }
                     })
                 })
-        } else if(cur_frm.doc.docstatus && cur_frm.doc.status === "To Material Request" ){
+        } else if(cur_frm.doc.docstatus && cur_frm.doc.status === "To Material Request" && cur_frm.doc.raw_material_from_customer === 'Own'){
 
                 frm.add_custom_button(__("Material Request"), () => {
                     cur_frm.trigger("material_request")
                 })
         }
-        if(!check_bom) {
+        if(!check_bom && cur_frm.doc.raw_material_from_customer === 'Customer') {
                     frm.add_custom_button(__("Create BOM"), () => {
                         cur_frm.call({
                             doc: cur_frm.doc,

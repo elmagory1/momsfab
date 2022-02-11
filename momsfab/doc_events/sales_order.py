@@ -171,6 +171,9 @@ def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
     doc.transaction_date = transaction_date
     doc.items = []
     for x in data:
+        bb_document = frappe.get_doc("Budget BOM", x)
+        if bb_document.type == "Customer":
+            frappe.throw("MR cannot be generated for Budget BOM " + str(x))
         bb_doc = get_mapped_doc("Budget BOM", x, {
             "Budget BOM": {
                 "doctype": "Material Request",
@@ -202,14 +205,19 @@ def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
                 }
             }
         })
-        bb_document = frappe.get_doc("Budget BOM", x)
+
         so = frappe.get_doc("Sales Order", so_name)
         qty = check_qty(bb_document.finish_good[0].item_code, so.items)
 
         for xx in bb_doc.items:
+            item = frappe.get_doc("Item", xx.item_code)
+
             if not xx.qty:
                 xx.qty = 1
             xx.qty = xx.qty * qty
+            xx.uom = item.stock_uom
+            xx.description = item.item_name
+
             doc.items.append(xx)
 
         for i in doc.items:
