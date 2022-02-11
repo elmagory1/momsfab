@@ -180,7 +180,7 @@ frappe.ui.form.on('Budget BOM', {
                     cur_frm.trigger("material_request")
                 })
         }
-        if(!check_bom && cur_frm.doc.raw_material_from_customer === 'Customer') {
+        if(!check_bom && cur_frm.doc.raw_material_from_customer === 'Own') {
                     frm.add_custom_button(__("Create BOM"), () => {
                         cur_frm.call({
                             doc: cur_frm.doc,
