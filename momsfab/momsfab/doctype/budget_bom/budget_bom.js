@@ -85,7 +85,7 @@ frappe.ui.form.on('Budget BOM', {
             }
         })
         cur_frm.set_query("item_code", "sheet_estimation", () => {
-            if(cur_frm.doc.type === "Own"){
+            if(cur_frm.doc.raw_material_from_customer === "Own"){
                 return;
             }
             return {
@@ -95,7 +95,7 @@ frappe.ui.form.on('Budget BOM', {
             }
         })
             cur_frm.set_query("item_code", "pipe_estimation", () => {
-            if(cur_frm.doc.type === "Own"){
+            if(cur_frm.doc.raw_material_from_customer === "Own"){
                 return;
             }
 
@@ -106,7 +106,7 @@ frappe.ui.form.on('Budget BOM', {
             }
         })
         cur_frm.set_query("item_code", "engineering_estimation", () => {
-            if(cur_frm.doc.type === "Own"){
+            if(cur_frm.doc.raw_material_from_customer === "Own"){
                 return;
             }
 
