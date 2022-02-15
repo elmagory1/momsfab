@@ -91,39 +91,39 @@ frappe.ui.form.on('Budget BOM', {
                 }
             }
         })
-        cur_frm.set_query("item_code", "sheet_estimation", () => {
-            if(cur_frm.doc.raw_material_from_customer === "Own"){
-                return;
-            }
-            return {
-                filters: {
-                    is_service_item: ['=', 1]
-                }
-            }
-        })
-            cur_frm.set_query("item_code", "pipe_estimation", () => {
-            if(cur_frm.doc.raw_material_from_customer === "Own"){
-                return;
-            }
-
-            return {
-                filters: {
-                    is_service_item: ['=', 1]
-                }
-            }
-        })
-        cur_frm.set_query("item_code", "engineering_estimation", () => {
-            if(cur_frm.doc.raw_material_from_customer === "Own"){
-                return;
-            }
-
-            return {
-                filters: {
-                    is_service_item: ['=', 1]
-
-                }
-            }
-        })
+        // cur_frm.set_query("item_code", "sheet_estimation", () => {
+        //     if(cur_frm.doc.raw_material_from_customer === "Own"){
+        //         return;
+        //     }
+        //     return {
+        //         filters: {
+        //             is_service_item: ['=', 1]
+        //         }
+        //     }
+        // })
+        //     cur_frm.set_query("item_code", "pipe_estimation", () => {
+        //     if(cur_frm.doc.raw_material_from_customer === "Own"){
+        //         return;
+        //     }
+        //
+        //     return {
+        //         filters: {
+        //             is_service_item: ['=', 1]
+        //         }
+        //     }
+        // })
+        // cur_frm.set_query("item_code", "engineering_estimation", () => {
+        //     if(cur_frm.doc.raw_material_from_customer === "Own"){
+        //         return;
+        //     }
+        //
+        //     return {
+        //         filters: {
+        //             is_service_item: ['=', 1]
+        //
+        //         }
+        //     }
+        // })
 	    if(cur_frm.is_new()){
 	        cur_frm.doc.created_item = 0
             cur_frm.refresh_field("created_item")
