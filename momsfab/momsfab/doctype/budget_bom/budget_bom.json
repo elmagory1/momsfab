@@ -271,7 +271,6 @@
    "label": "Finished Good"
   },
   {
-   "depends_on": "eval: doc.raw_material_from_customer == 'Own'",
    "fieldname": "finish_good",
    "fieldtype": "Table",
    "label": "Finished Good",
@@ -374,7 +373,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-15 15:12:32.323015",
+ "modified": "2022-02-15 15:13:12.693775",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",
