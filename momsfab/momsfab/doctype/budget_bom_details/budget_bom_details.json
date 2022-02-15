@@ -121,12 +121,14 @@
   },
   {
    "default": "0",
+   "depends_on": "eval: parent.raw_material_from_customer == 'Own'",
    "fieldname": "scrap",
    "fieldtype": "Float",
    "label": "Scrap"
   },
   {
    "default": "0",
+   "depends_on": "eval: parent.raw_material_from_customer == 'Own'",
    "fieldname": "raw_material_cost",
    "fieldtype": "Currency",
    "label": "Raw Material Cost",
@@ -162,7 +164,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-02-09 13:57:46.912722",
+ "modified": "2022-02-15 14:19:38.022120",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM Details",

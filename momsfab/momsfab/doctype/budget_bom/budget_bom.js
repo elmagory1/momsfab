@@ -533,7 +533,8 @@ frappe.ui.form.on('Wastage Charges', {
 
 
 function compute_total_amounts(cur_frm) {
-    var total_amount = cur_frm.doc.total_raw_material_cost + cur_frm.doc.total_operations_cost + cur_frm.doc.total_additional_operation_cost + cur_frm.doc.wastage_amount
+    var total_material = cur_frm.doc.raw_material_from_customer === 'Customer' ? 0 : cur_frm.doc.total_raw_material_cost
+    var total_amount = total_material + cur_frm.doc.total_operations_cost + cur_frm.doc.total_additional_operation_cost + cur_frm.doc.wastage_amount
     cur_frm.doc.total_amount = total_amount
     cur_frm.doc.total_square_feet =  cur_frm.doc.total_area_in_square_feet
 
