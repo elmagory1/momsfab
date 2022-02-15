@@ -203,13 +203,13 @@
    "read_only": 1
   },
   {
-   "depends_on": "eval: doc.type != 'Pipe Estimation' || doc.raw_material_from_customer == 'Own'",
+   "depends_on": "eval: doc.type != 'Pipe Estimation' && doc.raw_material_from_customer == 'Own'",
    "fieldname": "wastage_charges_section",
    "fieldtype": "Section Break",
    "label": "Wastage Charges"
   },
   {
-   "depends_on": "eval: doc.type != 'Pipe Estimation' || doc.raw_material_from_customer == 'Own'",
+   "depends_on": "eval: doc.type != 'Pipe Estimation' && doc.raw_material_from_customer == 'Own'",
    "fieldname": "wastage_charges",
    "fieldtype": "Table",
    "label": "Wastage Charges",
@@ -258,7 +258,7 @@
   },
   {
    "default": "0",
-   "depends_on": "eval: doc.type != 'Pipe Estimation' || doc.raw_material_from_customer == 'Own'",
+   "depends_on": "eval: doc.type != 'Pipe Estimation' && doc.raw_material_from_customer == 'Own'",
    "fieldname": "wastage_amount",
    "fieldtype": "Currency",
    "label": "Wastage Amount",
@@ -374,7 +374,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-15 14:27:36.166546",
+ "modified": "2022-02-15 15:00:01.017392",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",
