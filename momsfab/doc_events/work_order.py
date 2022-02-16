@@ -6,7 +6,7 @@ def validate_wo(doc, method):
 
 
 @frappe.whitelist()
-def generate_stock_entry(budget_bom,items):
+def generate_stock_entry(budget_bom,items, work_order):
     data_bb = json.loads(budget_bom)
     for i in data_bb:
         bb = frappe.get_doc("Budget BOM", i['budget_bom'])
@@ -17,6 +17,7 @@ def generate_stock_entry(budget_bom,items):
     obj = {
         "doctype": "Stock Entry",
         "stock_entry_type": "Material Receipt",
+        "work_order": work_order,
         "items": get_items(data)
     }
     se = frappe.get_doc(obj).insert()
