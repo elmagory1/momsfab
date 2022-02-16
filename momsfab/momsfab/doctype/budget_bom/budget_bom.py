@@ -61,28 +61,16 @@ class BudgetBOM(Document):
 	@frappe.whitelist()
 	def get_quotation_items(self):
 		items = []
-		if self.raw_material_from_customer == 'Own':
-			for i in self.finish_good:
-				items.append({
-					"item_code": i.item_code,
-					"item_name": i.item_name,
-					"description": i.item_name + "<br> Wastage Amount = " + str(self.wastage_amount ),
-					"qty": i.qty,
-					"uom": i.uom,
-					"rate": self.total_amount
-				})
-		else:
-			table_name = "sheet_estimation" if self.type == 'Sheet Estimation' else "engineering_estimation" if self.type == 'Engineering Estimation' else "pipe_estimation" if self.type == 'Pipe Estimation' else ""
-			for i in self.__dict__[table_name]:
-				item = frappe.get_doc("Item", i.item_code)
-				items.append({
-					"item_code": i.item_code,
-					"item_name": i.item_name,
-					"description": i.item_name + "<br> Wastage Amount = " + str(self.wastage_amount),
-					"qty": 1 if table_name == 'sheet_estimation' else i.production_qty,
-					"uom": item.stock_uom,
-					"rate": self.total_amount
-				})
+		for i in self.finish_good:
+			items.append({
+				"item_code": i.item_code,
+				"item_name": i.item_name,
+				"description": i.item_name + "<br> Wastage Amount = " + str(self.wastage_amount ),
+				"qty": i.qty,
+				"uom": i.uom,
+				"rate": self.total_amount
+			})
+
 		return items
 
 	@frappe.whitelist()
