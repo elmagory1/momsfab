@@ -21,7 +21,7 @@ def generate_stock_entry(budget_bom,items, work_order,cost_center):
         "items": get_items(data,cost_center)
     }
     se = frappe.get_doc(obj).insert()
-    frappe.db.sql(""" UPDATE `tabWork Order` SET stock_entry=%s WHERE name=%s""", work_order)
+    frappe.db.sql(""" UPDATE `tabWork Order` SET stock_entry=%s WHERE name=%s""", (se.name,work_order))
     frappe.db.commit()
     se.submit()
 
