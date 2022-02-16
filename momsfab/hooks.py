@@ -126,7 +126,8 @@ doc_events = {
 		"on_cancel": "momsfab.doc_events.material_request.cancel_mr",
 	},
 	"Work Order": {
-		"validate": "momsfab.doc_events.work_order.validate_wo"
+		"validate": "momsfab.doc_events.work_order.validate_wo",
+		"on_cancel": "momsfab.doc_events.work_order.on_cancel_wo"
 	},
 }
 

@@ -4,6 +4,20 @@ def validate_wo(doc, method):
     doc.allow_alternative_item = 1
 
 
+def on_cancel_wo(doc, method):
+    if doc.stock_entry:
+        se = frappe.get_doc("Stock Entry", doc.stock_entry)
+        frappe.db.sql(""" UPDATE `tabWork Order`  SET stock_entry='' WHERE name=%s""", doc.name)
+        frappe.db.commit()
+
+        se.cancel()
+
+    se = frappe.db.sql(""" SELECT * FROM `tabStock Entry` WHERE work_order=%s""",doc.name, as_dict=1)
+    if len(se) > 0:
+        for i in se:
+            if i.name:
+                sssee = frappe.get_doc("Stock Entry", i.name)
+                sssee.cancel()
 
 @frappe.whitelist()
 def generate_stock_entry(budget_bom,items, work_order,cost_center):
