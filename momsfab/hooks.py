@@ -238,6 +238,8 @@ fixtures = [
 					"Item-is_service_item",
 					"Work Order-stock_entry",
 					"Work Order-cost_center"
+					"Delivery Note Item-project_code",
+					"Delivery Note Item-references"
 
 				]
 			]
