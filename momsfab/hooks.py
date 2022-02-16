@@ -123,6 +123,9 @@ doc_events = {
 		"on_submit": "momsfab.doc_events.material_request.on_submit_mr",
 		"on_cancel": "momsfab.doc_events.material_request.cancel_mr",
 	},
+	"Work Order": {
+		"validate": "momsfab.doc_events.work_order.validate_wo"
+	},
 }
 
 # Scheduled Tasks

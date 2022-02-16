@@ -124,6 +124,7 @@ class BudgetBOM(Document):
 				"item": i.item_code,
 				"budget_bom": self.name,
 				"with_operations": 1,
+				"allow_alternative_item": 1,
 				"quantity": i.qty,
 				"items": self.get_raw_materials("sheet_estimation"),
 				"operations": [{
@@ -146,6 +147,7 @@ class BudgetBOM(Document):
 				"item": i.item_code,
 				"budget_bom": self.name,
 				"quantity": i.qty,
+				"allow_alternative_item": 1,
 				"with_operations": 1,
 				"items": self.get_raw_materials("engineering_estimation"),
 				"operations": [{
