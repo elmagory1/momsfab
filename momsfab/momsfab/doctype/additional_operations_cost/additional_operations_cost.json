@@ -41,7 +41,8 @@
    "fieldname": "description",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Description"
+   "label": "Description",
+   "reqd": 1
   },
   {
    "default": "0",
@@ -63,7 +64,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-02-08 14:30:54.114396",
+ "modified": "2022-02-16 11:51:37.652469",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Additional Operations Cost",
