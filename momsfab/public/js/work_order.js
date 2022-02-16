@@ -3,7 +3,7 @@
 
 frappe.ui.form.on("Work Order", {
     refresh: function () {
-        if(cur_frm.doc.docstatus && cur_frm.doc.status === 'Not Started'){
+        if(cur_frm.doc.docstatus && cur_frm.doc.status === 'Not Started' && !cur_frm.doc.stock_entry){
               cur_frm.add_custom_button("Stock Entry", () => {
                     frappe.call({
                         method: "momsfab.doc_events.work_order.generate_stock_entry",
