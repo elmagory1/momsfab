@@ -79,7 +79,7 @@ class BudgetBOM(Document):
 					"item_code": i.item_code,
 					"item_name": i.item_name,
 					"description": i.item_name + "<br> Wastage Amount = " + str(self.wastage_amount),
-					"qty": 1 if table_name == 'sheet_esstimation' else i.production_qty,
+					"qty": 1 if table_name == 'sheet_estimation' else i.production_qty,
 					"uom": item.stock_uom,
 					"rate": self.total_amount
 				})
