@@ -23,7 +23,7 @@ def on_save_se(doc, method):
                         "description": xxx.description,
                         "amount": xxx.amount,
                     })
-                for xxx in bb.additional_operations:
+                for xxx in bb.additional_operations_cost:
                     doc.append("additional_costs",{
                         "expense_account": xxx.account,
                         "description": xxx.description,

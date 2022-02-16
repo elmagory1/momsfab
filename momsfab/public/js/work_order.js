@@ -10,7 +10,8 @@ frappe.ui.form.on("Work Order", {
                         args: {
                             items: cur_frm.doc.required_items.length > 0 ? cur_frm.doc.required_items : [],
                             budget_bom: cur_frm.doc.budget_bom_reference.length > 0 ? cur_frm.doc.budget_bom_reference : [],
-                            work_order: cur_frm.doc.name
+                            work_order: cur_frm.doc.name,
+                            cost_center: cur_frm.doc.cost_center,
                         },
                   async:false,
                         callback: function () {

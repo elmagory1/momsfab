@@ -38,6 +38,7 @@ doctype_js = {
 	"Purchase Order" : "public/js/purchase_order.js",
 	"Item" : "public/js/item.js",
 	"Work Order" : "public/js/work_order.js",
+	"Manufacturing Settings" : "public/js/manufacturing_settings.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -229,10 +230,13 @@ fixtures = [
 					"Manufacturing Settings-fuel_charge",
 					"Manufacturing Settings-operation",
 					"Manufacturing Settings-workstation",
+					"Manufacturing Settings-difference_account",
 					"Account-fuel_charge",
 					"Account-delivery_charge",
 
-					"Item-is_service_item"
+					"Item-is_service_item",
+					"Work Order-stock_entry",
+					"Work Order-cost_center"
 
 				]
 			]
