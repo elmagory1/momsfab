@@ -37,5 +37,7 @@ def on_save_se(doc, method):
         doc.total_additional_costs = total_amount
         doc.value_difference = total_amount
 
+    if doc.work_order:
+        wo = frappe.get_doc("Work Order", doc.work_order)
         for i in doc.items:
             i.cost_center = wo.cost_center
