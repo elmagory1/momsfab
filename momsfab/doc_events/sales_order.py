@@ -180,7 +180,7 @@ def generate_mr(budget_boms, schedule_date, transaction_date, so_name):
     doc.items = []
     for x in data:
         bb_document = frappe.get_doc("Budget BOM", x)
-        if bb_document.type == "Customer":
+        if bb_document.raw_material_from_customer == "Customer":
             frappe.throw("MR cannot be generated for Budget BOM " + str(x))
         bb_doc = get_mapped_doc("Budget BOM", x, {
             "Budget BOM": {

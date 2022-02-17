@@ -24,7 +24,7 @@ def generate_stock_entry(budget_bom,items, work_order,cost_center):
     data_bb = json.loads(budget_bom)
     for i in data_bb:
         bb = frappe.get_doc("Budget BOM", i['budget_bom'])
-        if bb.raw_material_from_customer != 'Customer':
+        if bb.raw_material_from_customer == 'Own':
             frappe.throw("Material Receipt Stock Entry is not allowed for Budget BOM " + i['budget_bom'])
     data = json.loads(items)
 
