@@ -122,7 +122,7 @@ class BudgetBOM(Document):
 					"workstation": i.workstation,
 					"time_in_mins": self.total_operations_time,
 					"hour_rate": self.total_operations_cost,
-					"operating_cost": (self.total_operations_cost * self.total_operations_time) / 60 ,
+					"operating_cost": self.total_operations_cost,
 				}]
 			}
 			print("OBJEEEEEEEEEECT")
@@ -146,7 +146,7 @@ class BudgetBOM(Document):
 					"workstation": i.workstation,
 					"time_in_mins": self.total_operations_time,
 					"hour_rate": self.total_operations_cost,
-					"operating_cost": (self.total_operations_cost * self.total_operations_time) / 60 ,
+					"operating_cost":self.total_operations_cost,
 				}]
 			}
 			bom = frappe.get_doc(obj).insert()
@@ -167,7 +167,7 @@ class BudgetBOM(Document):
 					"workstation": i.workstation,
 					"time_in_mins": self.total_operations_time,
 					"hour_rate": self.total_operations_cost,
-					"operating_cost": (self.total_operations_cost * self.total_operations_time) / 60 ,
+					"operating_cost": self.total_operations_cost ,
 				}]
 			}
 			bom = frappe.get_doc(obj).insert()
