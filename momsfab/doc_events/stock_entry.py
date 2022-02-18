@@ -12,7 +12,7 @@ def on_submit_se(doc, method):
 
 
 def on_save_se(doc, method):
-    enable_additional_cost_in_stock_entry = frappe.db.get_single_value('Global Defaults', 'enable_additional_cost_in_stock_entry')
+    enable_additional_cost_in_stock_entry = frappe.db.get_single_value('Manufacturing Settings', 'enable_additional_cost_in_stock_entry')
     types = ['Manufacture','Material Receipt'] if enable_additional_cost_in_stock_entry else ['Material Receipt']
     if doc.stock_entry_type in types and doc.work_order and doc.flags.in_insert:
         wo = frappe.get_doc("Work Order", doc.work_order)
