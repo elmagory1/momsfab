@@ -315,13 +315,13 @@ frappe.ui.form.on('Budget BOM Details', {
 	},
     cutting_time_in_minutes: function(frm, cdt, cdn) {
         var d = locals[cdt][cdn]
-        d.operations_cost = (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
+        d.operations_cost = cur_frm.doc.type === 'Pipe Estimation' ? (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute * d.production_qty :(d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
         cur_frm.refresh_field(d.parentfield)
         compute_totals(cur_frm)
 	},
     handling_time: function(frm, cdt, cdn) {
         var d = locals[cdt][cdn]
-        d.operations_cost = (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
+           d.operations_cost = cur_frm.doc.type === 'Pipe Estimation' ? (d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute * d.production_qty :(d.cutting_time_in_minutes + d.handling_time) * cutting_rate_per_minute
         cur_frm.refresh_field(d.parentfield)
         compute_totals(cur_frm)
 	}
