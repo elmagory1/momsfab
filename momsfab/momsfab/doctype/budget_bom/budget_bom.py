@@ -121,7 +121,6 @@ class BudgetBOM(Document):
 					"operation": i.operation,
 					"workstation": i.workstation,
 					"time_in_mins": self.total_operations_time,
-					"operating_cost": self.total_operations_cost,
 					"hour_rate": (self.total_operations_cost / 60) * self.total_operations_time,
 				}]
 			}
@@ -145,7 +144,6 @@ class BudgetBOM(Document):
 					"operation": i.operation,
 					"workstation": i.workstation,
 					"time_in_mins": self.total_operations_time,
-					"operating_cost": self.total_operations_cost,
 					"hour_rate": (self.total_operations_cost / 60) * self.total_operations_time,
 				}]
 			}
@@ -166,7 +164,6 @@ class BudgetBOM(Document):
 					"operation": i.operation,
 					"workstation": i.workstation,
 					"time_in_mins": self.total_operations_time,
-					"operating_cost": self.total_operations_cost,
 					"hour_rate": (self.total_operations_cost / 60) * self.total_operations_time,
 				}]
 			}
