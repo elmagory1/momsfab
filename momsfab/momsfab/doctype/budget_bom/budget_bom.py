@@ -20,7 +20,7 @@ class BudgetBOM(Document):
 
 	@frappe.whitelist()
 	def create_item(self):
-		fg_item_group = frappe.db.get_single_value('Global Defaults', 'fg_item_group')
+		fg_item_group = frappe.db.get_single_value('Manufacturing Settings', 'fg_item_group')
 		if not fg_item_group:
 			frappe.throw("Please set up FG Item Group in Manufacturing Settings")
 		obj = {
