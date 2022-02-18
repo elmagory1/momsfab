@@ -24,7 +24,8 @@ frappe.ui.form.on("Work Order", {
              })
         }
         cur_frm.remove_custom_button("Alternate Item")
-        frm.add_custom_button(__('Custom Alternative Item'), () => {
+		if(cur_frm.doc.docstatus === 0){
+        	frm.add_custom_button(__('Item Alternative'), () => {
 				console.log("ALTERNATIVE")
 					erpnext.utils.select_alternate_items_2({
 						frm: frm,
@@ -37,6 +38,8 @@ frappe.ui.form.on("Work Order", {
 						}
 					});
 				});
+		}
+
 
     }
 })
