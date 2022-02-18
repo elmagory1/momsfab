@@ -490,7 +490,7 @@ frappe.ui.form.on('Additional Operations Cost', {
 	charge: function(frm, cdt, cdn) {
         var d = locals[cdt][cdn]
         if(d.delivery_charge){
-            d.total_charge = d.charge * cur_frm.doc.total_area_in_square_feet
+            d.total_charge = d.charge * cur_frm.doc.total_production_qty
             cur_frm.refresh_field(d.parentfield)
             compute_operations_cost(cur_frm)
         } else if (d.fuel_charge){
@@ -503,7 +503,7 @@ frappe.ui.form.on('Additional Operations Cost', {
     account: function(frm, cdt, cdn) {
         var d = locals[cdt][cdn]
         if(d.delivery_charge){
-            d.total_charge = d.charge * cur_frm.doc.total_area_in_square_feet
+            d.total_charge = d.charge * cur_frm.doc.total_production_qty
             cur_frm.refresh_field(d.parentfield)
         } else if (d.fuel_charge){
             d.total_charge = d.charge * cur_frm.doc.total_operations_time
