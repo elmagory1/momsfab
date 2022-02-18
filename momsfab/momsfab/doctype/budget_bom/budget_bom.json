@@ -238,6 +238,7 @@
   },
   {
    "default": "0",
+   "depends_on": "eval: doc.type == 'Sheet Estimation'",
    "fieldname": "rate_per_square_feet",
    "fieldtype": "Float",
    "label": "Rate per Square Feet",
@@ -291,7 +292,7 @@
   },
   {
    "default": "0",
-   "depends_on": "eval: doc.type != 'Pipe Estimation' || doc.raw_material_from_customer == 'Own'",
+   "depends_on": "eval: doc.type == 'Sheet Estimation' || doc.raw_material_from_customer == 'Own'",
    "fieldname": "total_area_in_square_feet",
    "fieldtype": "Float",
    "label": "Total Area in Square Feet",
@@ -373,7 +374,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-18 07:37:08.655228",
+ "modified": "2022-02-18 10:32:06.945645",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",

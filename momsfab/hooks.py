@@ -40,6 +40,7 @@ doctype_js = {
 	"Work Order" : "public/js/work_order.js",
 	"Manufacturing Settings" : "public/js/manufacturing_settings.js",
 	"Delivery Note" : "public/js/delivery_note.js",
+	"Sales Invoice" : "public/js/sales_invoice.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -252,6 +253,7 @@ fixtures = [
 					"Delivery Note Item-references",
 					"Manufacturing Settings-enable_additional_cost_in_stock_entry",
 					"Manufacturing Settings-fg_item_group",
+					"Sales Invoice Item-project_code",
 
 				]
 			]

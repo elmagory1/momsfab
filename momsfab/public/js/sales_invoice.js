@@ -1,6 +1,4 @@
-
-
-frappe.ui.form.on("Delivery Note", {
+frappe.ui.form.on("Sales Invoice", {
     onload_post_render: function () {
         console.log("AKJSDHLAKSDLJKA")
         if(cur_frm.is_new() && cur_frm.doc.items.length > 0){
