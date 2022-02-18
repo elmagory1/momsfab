@@ -240,7 +240,8 @@ fixtures = [
 					"Work Order-stock_entry",
 					"Work Order-cost_center",
 					"Delivery Note Item-project_code",
-					"Delivery Note Item-references"
+					"Delivery Note Item-references",
+					"Manufacturing Settings-enable_additional_cost_in_stock_entry",
 
 				]
 			]
