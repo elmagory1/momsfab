@@ -5,6 +5,7 @@ from frappe.model.mapper import get_mapped_doc
 def on_submit_mr(doc, method):
     for i in doc.budget_bom_reference:
         if i.budget_bom:
+
             frappe.db.sql(""" UPDATE `tabBudget BOM` SET status='To Purchase Order' WHERE name=%s """, i.budget_bom)
             frappe.db.commit()
 @frappe.whitelist()

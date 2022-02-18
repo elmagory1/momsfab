@@ -63,11 +63,11 @@
    "options": "BUDGET-"
   },
   {
-   "default": "In Progress",
+   "default": "To Quotation",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "In Progress\nTo Quotation\nQuotation In Progress\nTo Material Request\nTo BOM\nTo Quotation",
+   "options": "In Progress\nTo Quotation\nQuotation In Progress\nTo Material Request\nTo Purchase Order\nTo Sales Order\nTo BOM\nTo Quotation\nCompleted\nTo Delivery\nTo Bill",
    "read_only": 1
   },
   {
@@ -373,7 +373,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-15 15:13:12.693775",
+ "modified": "2022-02-18 07:32:02.027561",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",

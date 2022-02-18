@@ -9,13 +9,17 @@ def on_submit_so(doc, method):
 
     for i in doc.budget_bom_reference:
         if i.budget_bom:
-            frappe.db.sql(""" UPDATE `tabBudget BOM` SET status=%s WHERE name=%s  """, ("To Material Request", i.budget_bom))
+            bb = frappe.get_doc("Budget BOM", i.budget_bom)
+            type = bb.raw_material_from_customer
+            status = "To Material Request" if type == 'Own' else "To Purchase Order"
+            frappe.db.sql(""" UPDATE `tabBudget BOM` SET status=%s WHERE name=%s  """, (status, i.budget_bom))
             frappe.db.commit()
+
 
 def on_cancel_so(doc, method):
     for i in doc.budget_bom_reference:
         if i.budget_bom:
-            frappe.db.sql(""" UPDATE `tabBudget BOM` SET status=%s WHERE name=%s  """,("Quotation In Progress", i.budget_bom))
+            frappe.db.sql(""" UPDATE `tabBudget BOM` SET status=%s WHERE name=%s  """,("To Sales Order", i.budget_bom))
             frappe.db.commit()
 
 @frappe.whitelist()

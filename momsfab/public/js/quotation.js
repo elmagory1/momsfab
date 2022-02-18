@@ -73,7 +73,7 @@ function fetch_boms(cur_frm, selections) {
             frappe.db.get_list('Budget BOM', {
                 filters: {
                    opportunity: selections[x],
-                    status: 'In Progress',
+                    status: 'To Quotation',
                     docstatus: 1
                 },
                 limit:50

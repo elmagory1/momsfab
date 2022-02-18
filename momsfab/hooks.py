@@ -128,7 +128,16 @@ doc_events = {
 	},
 	"Work Order": {
 		"validate": "momsfab.doc_events.work_order.validate_wo",
-		"on_cancel": "momsfab.doc_events.work_order.on_cancel_wo"
+		"on_cancel": "momsfab.doc_events.work_order.on_cancel_wo",
+		"on_submit": "momsfab.doc_events.work_order.on_submit_wo"
+	},
+	"Delivery Note": {
+		"on_submit": "momsfab.doc_events.delivery_note.on_submit_dn",
+		"on_cancel": "momsfab.doc_events.delivery_note.on_cancel_dn"
+	},
+	"Sales Invoice": {
+		"on_submit": "momsfab.doc_events.sales_invoice.on_submit_si",
+		"on_cancel": "momsfab.doc_events.sales_invoice.on_cancel_si"
 	},
 }
 

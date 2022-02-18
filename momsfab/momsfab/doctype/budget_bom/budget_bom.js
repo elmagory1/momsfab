@@ -31,6 +31,10 @@ frappe.ui.form.on('Budget BOM', {
             async:false,
             callback: (r) => {
                 cur_frm.reload_doc()
+             frappe.show_alert({
+                                    message: __('Item Created'),
+                                    indicator: 'green'
+                                }, 3);
              }
         })
     },
@@ -163,7 +167,7 @@ frappe.ui.form.on('Budget BOM', {
               operation = o
         })
 
-        if(cur_frm.doc.docstatus && cur_frm.doc.status === "In Progress" && !has_quotation){
+        if(cur_frm.doc.docstatus && cur_frm.doc.status === "To Quotation" && !has_quotation){
 
 	            cur_frm.add_custom_button(__("Quotation"), () => {
                     cur_frm.call({

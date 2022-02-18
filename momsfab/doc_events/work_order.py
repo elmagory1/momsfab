@@ -3,6 +3,13 @@ import frappe, json
 def validate_wo(doc, method):
     doc.allow_alternative_item = 1
 
+def on_submit_wo(doc, method):
+    for i in doc.budget_bom_reference:
+        if i.budget_bom:
+            frappe.db.sql(""" UPDATE `tabBudget BOM` SET status=%s WHERE name=%s  """, ("To Deliver", i.budget_bom))
+            frappe.db.commit()
+
+
 
 def on_cancel_wo(doc, method):
     if doc.stock_entry:
@@ -19,6 +26,11 @@ def on_cancel_wo(doc, method):
                 sssee = frappe.get_doc("Stock Entry", i.name)
                 if sssee.docstatus == 1:
                     sssee.cancel()
+    for i in doc.budget_bom_reference:
+        if i.budget_bom:
+            frappe.db.sql(""" UPDATE `tabBudget BOM` SET status=%s WHERE name=%s  """, ("To Work Order", i.budget_bom))
+            frappe.db.commit()
+
 
 @frappe.whitelist()
 def generate_stock_entry(budget_bom,items, work_order,cost_center):
