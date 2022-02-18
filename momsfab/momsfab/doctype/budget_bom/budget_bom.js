@@ -8,6 +8,7 @@ var wastage_rate = 0
 var fuel_charge = 0
 var workstation = ""
 var operation = ""
+var fg_item_group = ""
 
 var has_quotation = false
 var generating_quotation = false
@@ -95,45 +96,40 @@ frappe.ui.form.on('Budget BOM', {
                 }
             }
         })
-        // cur_frm.set_query("item_code", "sheet_estimation", () => {
-        //     if(cur_frm.doc.raw_material_from_customer === "Own"){
-        //         return;
-        //     }
-        //     return {
-        //         filters: {
-        //             is_service_item: ['=', 1]
-        //         }
-        //     }
-        // })
-        //     cur_frm.set_query("item_code", "pipe_estimation", () => {
-        //     if(cur_frm.doc.raw_material_from_customer === "Own"){
-        //         return;
-        //     }
-        //
-        //     return {
-        //         filters: {
-        //             is_service_item: ['=', 1]
-        //         }
-        //     }
-        // })
-        // cur_frm.set_query("item_code", "engineering_estimation", () => {
-        //     if(cur_frm.doc.raw_material_from_customer === "Own"){
-        //         return;
-        //     }
-        //
-        //     return {
-        //         filters: {
-        //             is_service_item: ['=', 1]
-        //
-        //         }
-        //     }
-        // })
+        cur_frm.set_query("item_code", "sheet_estimation", () => {
+            return {
+                filters: [
+                   ["item_group","not in", [fg_item_group]]
+                ]
+            }
+        })
+            cur_frm.set_query("item_code", "pipe_estimation", () => {
+
+
+            return {
+                filters: [
+                   ["item_group","not in", [fg_item_group]]
+                ]
+            }
+        })
+        cur_frm.set_query("item_code", "engineering_estimation", () => {
+
+            return {
+                filters: [
+                   ["item_group","not in", [fg_item_group]]
+                ]
+            }
+        })
 	    if(cur_frm.is_new()){
 	        cur_frm.doc.created_item = 0
             cur_frm.refresh_field("created_item")
         }
          cur_frm.get_field("finish_good").grid.cannot_add_rows = true;
         cur_frm.refresh_field("finish_good")
+        frappe.db.get_single_value("Manufacturing Settings","fg_item_group")
+            .then(fg => {
+              fg_item_group = fg
+        })
         frappe.db.get_single_value("Manufacturing Settings","scale_factor")
             .then(scale_factor_value => {
               scale_factor = scale_factor_value

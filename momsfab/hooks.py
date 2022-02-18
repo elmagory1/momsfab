@@ -251,6 +251,7 @@ fixtures = [
 					"Delivery Note Item-project_code",
 					"Delivery Note Item-references",
 					"Manufacturing Settings-enable_additional_cost_in_stock_entry",
+					"Manufacturing Settings-fg_item_group",
 
 				]
 			]

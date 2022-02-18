@@ -138,7 +138,7 @@
   {
    "fieldname": "additional_operations_cost_section",
    "fieldtype": "Section Break",
-   "label": "Additional Operations Cost"
+   "label": "Delivery and Fuel  Cost"
   },
   {
    "fieldname": "additional_operations_cost",
@@ -373,7 +373,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-18 07:32:02.027561",
+ "modified": "2022-02-18 07:37:08.655228",
  "modified_by": "Administrator",
  "module": "Momsfab",
  "name": "Budget BOM",

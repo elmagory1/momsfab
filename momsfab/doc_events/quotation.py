@@ -7,9 +7,9 @@ def submit_q(doc, event):
             frappe.db.sql(""" UPDATE `tabBudget BOM` SET status=%s WHERE name=%s  """,("To Sales Order", i.budget_bom))
             frappe.db.commit()
 
-    # for ii in doc.budget_bom_opportunity:
-    #     frappe.db.sql(""" UPDATE `tabOpportunity` SET status='Quotation' WHERE name=%s  """, (ii.opportunity))
-    #     frappe.db.commit()
+    for ii in doc.budget_bom_opportunity:
+        frappe.db.sql(""" UPDATE `tabOpportunity` SET status='Quotation' WHERE name=%s  """, ii.opportunity)
+        frappe.db.commit()
 
 @frappe.whitelist()
 def cancel_q(doc, event):

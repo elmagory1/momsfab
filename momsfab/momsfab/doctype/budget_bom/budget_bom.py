@@ -20,14 +20,16 @@ class BudgetBOM(Document):
 
 	@frappe.whitelist()
 	def create_item(self):
-		table_name = "finish_good"
+		fg_item_group = frappe.db.get_single_value('Global Defaults', 'fg_item_group')
+		if not fg_item_group:
+			frappe.throw("Please set up FG Item Group in Manufacturing Settings")
 		obj = {
 			"doctype": "Item",
 			"item_code": self.opportunity + "_SHEET" ,
 			"item_name": self.opportunity + "_SHEET" ,
 			"description": self.opportunity + "_SHEET" ,
 			"stock_uom": "Nos",
-			"item_group": "All Item Groups"
+			"item_group": fg_item_group
 		}
 		item_created = frappe.get_doc(obj).insert()
 		frappe.db.sql(""" UPDATE `tabFinish Good` SET item_code=%s,item_name=%s,uom=%s WHERE parent=%s """, (item_created.name,item_created.item_name,item_created.stock_uom, self.name))
